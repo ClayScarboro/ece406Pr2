@@ -100,7 +100,7 @@ cacheLine * Cache::findLine(ulong addr)
 }
 
 /*upgrade LRU line to be MRU line*/
-void Cache::updateLRU(cacheLine *line) d
+void Cache::updateLRU(cacheLine *line) BREAK THE CODE!
 {
    line->setSeq(currentCycle);  
 }
