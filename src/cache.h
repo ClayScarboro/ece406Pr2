@@ -42,7 +42,7 @@ public:
    void setTag(ulong a)       { tag = a; }
    void invalidate()          { tag = 0; Flags = INVALID; } //useful function
    
-   int doMsiReq();
+   int doMsiReq(int);
    void doMsiSnoop(int);
    void doMsiBus();
    void doMESI();
