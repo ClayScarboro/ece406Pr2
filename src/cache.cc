@@ -21,9 +21,14 @@ Cache::Cache(int s,int a,int b )
    log2Sets   = (ulong)(log2(sets));   
    log2Blk    = (ulong)(log2(b));   
   
-   //*******************//
-   //initialize your counters here//
-   //*******************//
+   int totalMissRate = 0;
+   int cache2cache = 0;
+   int memoryTransactions = 0;
+   int interventions = 0;
+   int invalidations = 0;
+   int flushes = 0;
+   int BusRdX = 0;
+   int BusUpgr = 0;
  
    tagMask =0;
    for(i=0;i<log2Sets;i++)
@@ -273,9 +278,20 @@ cacheLine *Cache::fillLine(ulong addr)
    return victim;
 }
 
-void Cache::printStats()
+void Cache::printStats(int proc)
 { 
-   printf("===== Simulation results      =====\n");
-   /****print out the rest of statistics here.****/
-   /****follow the ouput file format**************/
+   printf("===== Simulation results (Cache %d) =====\n",proc);
+   printf("01. number of reads: %d\n",reads);
+   printf("02. number of read misses: %d\n",readMisses);
+   printf("03. number of writes: %d\n",writes);
+   printf("04. number of write misses: %d\n",writeMisses);
+   printf("05. total miss rate: %d%\n",totalMissRate);
+   printf("06. number of writebacks: %d\n",writeBacks);
+   printf("07. number of cache-to-cache transfers: %d\n",cache2cache);
+   printf("08. number of memory transactions: %d\n",memoryTransactions);
+   printf("09. number of interventions: %d\n",interventions);
+   printf("10. number of invalidations: %d\n",invalidations);
+   printf("11. number of flushes: %d\n",flushes);
+   printf("12. number of BusRdX: %d\n",BusRdX);
+   printf("13. number of BusUpgr: %d\n",BusUpgr);
 }

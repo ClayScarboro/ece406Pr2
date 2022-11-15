@@ -88,7 +88,7 @@ public:
    void writeBack(ulong) {writeBacks++;}
    int Access(ulong,uchar);
    void Snoop(ulong,uchar,int);
-   void printStats();
+   void printStats(int);
    void updateLRU(cacheLine *);
 
    //******///

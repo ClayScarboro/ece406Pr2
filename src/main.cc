@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
         inst = cacheArray[proc]->Access(addr,op);
 		
 		//Snooper
-		printf("Debug 2\n");
 		for(int i = 0; i < 4; i++){
 			if(inst == i ) continue;
 			else cacheArray[proc]->Snoop(addr,op,inst);
@@ -73,8 +72,8 @@ int main(int argc, char *argv[])
 
     fclose(pFile);
 
-    //********************************//
-    //print out all caches' statistics //
-    //********************************//
+    for(int i = 0; i < num_processors; i++){
+		cacheArray[i]->printStats(i);
+	}
     
 }
