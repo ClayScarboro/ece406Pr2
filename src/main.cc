@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     for(ulong i = 0; i < num_processors; i++) {
         if(protocol == 0) {
             cacheArray[i] = new Cache(cache_size, cache_assoc, blk_size);
+			printf("Debug 3/n");
         }
     }
 
