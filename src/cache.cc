@@ -85,7 +85,7 @@ int Cache::Access(ulong addr,uchar op)
    
 }
 
-void Cache::Snooper(ulong addr, uchar op, int inst){
+void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	line->doMsiSnoop(inst);
 }
