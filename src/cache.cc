@@ -81,7 +81,7 @@ int Cache::Access(ulong addr,uchar op)
       if(op == 'w') line->setFlags(DIRTY);
    }
    
-   return line->doMsiReq();
+   return line->doMsiReq(currentTransaction);
    
 }
 
