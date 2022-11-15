@@ -18,7 +18,7 @@ enum {
    VALID,
    DIRTY,
    SHARED,
-   MODIFED,
+   MODIFIED,
    INVALIDATED
 };
 
@@ -49,7 +49,7 @@ public:
    
    bool isValid()             { return ((Flags) != INVALID); }
    bool isShared()             { return ((State) == SHARED); }
-   bool isModified()             { return ((State) == MODIFED); }
+   bool isModified()             { return ((State) == MODIFIED); }
    bool isInvalidated()             { return ((State) == INVALIDATED); }
 };
 
