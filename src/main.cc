@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         printf("%d\n", line);
 #endif
 		//Cache and Requestor
-        cacheArray[proc]->Access(addr,op);
+        inst = cacheArray[proc]->Access(addr,op);
 		
 		//Snooper
 		printf("Debug 2\n");
