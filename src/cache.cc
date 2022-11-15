@@ -120,6 +120,8 @@ int cacheLine::doMsiReq(int transaction){
 			return 2;
 		}	
 	}
+	
+	return 0;
 }
 
 //Does the Snooper Side State Machine for MSI
@@ -167,6 +169,9 @@ int cacheLine::doMsiSnoop(int transaction){
 			return 0;
 		}
 	}
+	
+	return 0;
+	
 }
 
 
