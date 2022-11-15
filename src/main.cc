@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
     for(ulong i = 0; i < num_processors; i++) {
         if(protocol == 0) {
             cacheArray[i] = new Cache(cache_size, cache_assoc, blk_size);
-			printf("Debug 3/n");
         }
     }
 
@@ -60,15 +59,15 @@ int main(int argc, char *argv[])
         printf("%d\n", line);
 #endif
 		//Cache and Requestor
-		printf("Debug 1/n");
-        inst = cacheArray[proc]->Access(addr,op);
+		printf("Debug 1\n");
+        //inst = cacheArray[proc]->Access(addr,op);
 		
 		//Snooper
-		printf("Debug 2/n");
-		for(int i = 0; i < 4; i++){
-			if(inst == i ) continue;
-			else cacheArray[proc]->Snoop(addr,op,inst);
-		}
+		printf("Debug 2\n");
+		//for(int i = 0; i < 4; i++){
+		//	if(inst == i ) continue;
+		//	else cacheArray[proc]->Snoop(addr,op,inst);
+		//}
 			
         line++;
     }
