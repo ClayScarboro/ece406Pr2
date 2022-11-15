@@ -48,7 +48,7 @@ Cache::Cache(int s,int a,int b )
 /**you might add other parameters to Access()
 since this function is an entry point 
 to the memory hierarchy (i.e. caches)**/
-void Cache::Access(ulong addr,uchar op)
+int Cache::Access(ulong addr,uchar op)
 {
 	
 	// 1 = PrRd; 2 = PrWr;
@@ -81,8 +81,7 @@ void Cache::Access(ulong addr,uchar op)
       if(op == 'w') line->setFlags(DIRTY);
    }
    
-   currentTransaction = line->doMsiReq();
-   Snooper(addr,op,currentTransaction);
+   return line->doMsiReq();
    
 }
 
