@@ -74,6 +74,17 @@ public:
     Cache(int,int,int);
    ~Cache() { delete cache;}
    
+   
+   //Counters
+   int totalMissRate;
+   int cache2cache;
+   int memoryTransactions;
+   int interventions;
+   int invalidations;
+   int flushes;
+   int BusRdX;
+   int BusUpgr;
+   
    cacheLine *findLineToReplace(ulong addr);
    cacheLine *fillLine(ulong addr);
    cacheLine * findLine(ulong addr);

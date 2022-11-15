@@ -21,14 +21,14 @@ Cache::Cache(int s,int a,int b )
    log2Sets   = (ulong)(log2(sets));   
    log2Blk    = (ulong)(log2(b));   
   
-   int totalMissRate = 0;
-   int cache2cache = 0;
-   int memoryTransactions = 0;
-   int interventions = 0;
-   int invalidations = 0;
-   int flushes = 0;
-   int BusRdX = 0;
-   int BusUpgr = 0;
+   totalMissRate = 0;
+   cache2cache = 0;
+   memoryTransactions = 0;
+   interventions = 0;
+   invalidations = 0;
+   flushes = 0;
+   BusRdX = 0;
+   BusUpgr = 0;
  
    tagMask =0;
    for(i=0;i<log2Sets;i++)
