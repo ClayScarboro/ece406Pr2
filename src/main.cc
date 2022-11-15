@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 		
 		//Snooper
 		for(int i = 0; i < 4; i++){
-			cacheArray[proc]->doMsiSnoop(inst);
+			cacheArray[proc]->Snoop(addr,op,inst);
 		}
 			
         line++;

@@ -86,9 +86,8 @@ int Cache::Access(ulong addr,uchar op)
 }
 
 void Cache::Snooper(ulong addr, uchar op, int inst){
-	for(int i = 0; i < 4; i++){
-		cachesArray[proc]->doMsiSnoop(inst);
-	}
+	cacheLine * line = findLine(addr);
+	line->doMsiSnoop(inst);
 }
 
 //Does the Requestor side State Machine for MSI

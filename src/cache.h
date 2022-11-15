@@ -34,7 +34,7 @@ public:
    cacheLine()                { tag = 0; Flags = 0; }
    ulong getTag()             { return tag; }
    ulong getFlags()           { return Flags;}
-   ulong getState()			{ return States; }
+   ulong getState()			{ return State; }
    ulong getSeq()             { return seq; }
    void setState(ulong state){State = state;}
    void setSeq(ulong Seq)     { seq = Seq;}
@@ -87,7 +87,7 @@ public:
    
    void writeBack(ulong) {writeBacks++;}
    int Access(ulong,uchar);
-   void Snooper(ulong,uchar,int);
+   void Snoop(ulong,uchar,int);
    void printStats();
    void updateLRU(cacheLine *);
 
