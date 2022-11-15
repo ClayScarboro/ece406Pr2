@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
     fclose(pFile);
 
-    for(int i = 0; i < num_processors; i++){
+    for(int i = 0; i < (int)num_processors; i++){
 		cacheArray[i]->printStats(i);
 	}
     
