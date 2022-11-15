@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     while(fscanf(pFile, "%lu %c %lx", &proc, &op, &addr) != EOF)
     {
 #ifdef _DEBUG
-        //printf("%d\n", line);
+        printf("%d\n", line);
 #endif
 		//Cache and Requestor
         inst = cacheArray[proc]->Access(addr,op);
