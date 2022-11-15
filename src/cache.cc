@@ -85,9 +85,7 @@ int Cache::Access(ulong addr,uchar op)
    
    
    cacheLine * line2 = findLine(addr);
-   printf("DEBUG3\n");
    currentTransaction = line2->doMsiReq(currentTransaction);
-   printf("DEBUG03\n");
    return currentTransaction;
    
 }
