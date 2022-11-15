@@ -59,11 +59,11 @@ int main(int argc, char *argv[])
         //printf("%d\n", line);
 #endif
 		//Cache and Requestor
-        inst = cachesArray[proc]->Access(addr,op);
+        inst = cacheArray[proc]->Access(addr,op);
 		
 		//Snooper
 		for(int i = 0; i < 4; i++){
-			cachesArray[proc]->doMsiSnoop(inst);
+			cacheArray[proc]->doMsiSnoop(inst);
 		}
 			
         line++;
