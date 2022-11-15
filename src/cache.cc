@@ -70,8 +70,10 @@ int Cache::Access(ulong addr,uchar op)
       else readMisses++;
 
       cacheLine *newline = fillLine(addr);
-      if(op == 'w') newline->setFlags(DIRTY);    
+      if(op == 'w') newline->setFlags(DIRTY);   
+	  printf("DEBUG3\n");
 	  newline->setState(INVALIDATED);
+	  printf("DEBUG34\n");
       
    }
    else
