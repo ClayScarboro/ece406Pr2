@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     ulong proc;
     char op;
     ulong addr;
+	int inst;
 
     int line = 1;
     while(fscanf(pFile, "%lu %c %lx", &proc, &op, &addr) != EOF)
