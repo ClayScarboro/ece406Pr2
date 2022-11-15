@@ -16,7 +16,10 @@ typedef unsigned int uint;
 enum {
    INVALID = 0,
    VALID,
-   DIRTY
+   DIRTY,
+   SHARED,
+   MODIFED,
+   INVALIDATED
 };
 
 class cacheLine 
@@ -25,17 +28,29 @@ protected:
    ulong tag;
    ulong Flags;   // 0:invalid, 1:valid, 2:dirty 
    ulong seq; 
+   ulong State;		// 3: Shared, 4:Modifed, 5: Invalidated
  
 public:
    cacheLine()                { tag = 0; Flags = 0; }
    ulong getTag()             { return tag; }
    ulong getFlags()           { return Flags;}
+   ulong getState()			{ return States; }
    ulong getSeq()             { return seq; }
+   void setState(ulong state){State = state;}
    void setSeq(ulong Seq)     { seq = Seq;}
    void setFlags(ulong flags) {  Flags = flags;}
    void setTag(ulong a)       { tag = a; }
    void invalidate()          { tag = 0; Flags = INVALID; } //useful function
+   
+   void doMsiReq();
+   void doMsiSnoop();
+   void doMsiBus();
+   void doMESI();
+   
    bool isValid()             { return ((Flags) != INVALID); }
+   bool isShared()             { return ((State) == SHARED); }
+   bool isModified()             { return ((State) == MODIFED); }
+   bool isInvalidated()             { return ((State) == INVALIDATED); }
 };
 
 class Cache
@@ -72,6 +87,7 @@ public:
    
    void writeBack(ulong) {writeBacks++;}
    void Access(ulong,uchar);
+   void Snooper(ulong,uchar,int);
    void printStats();
    void updateLRU(cacheLine *);
 

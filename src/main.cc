@@ -55,11 +55,10 @@ int main(int argc, char *argv[])
     while(fscanf(pFile, "%lu %c %lx", &proc, &op, &addr) != EOF)
     {
 #ifdef _DEBUG
-        printf("%d\n", line);
+        //printf("%d\n", line);
 #endif
-        // propagate request down through memory hierarchy
-        // by calling cachesArray[processor#]->Access(...)
-
+        cachesArray[proc]->Access(addr,op);
+			
         line++;
     }
 

@@ -50,11 +50,18 @@ since this function is an entry point
 to the memory hierarchy (i.e. caches)**/
 void Cache::Access(ulong addr,uchar op)
 {
+	
+	// 1 = PrRd; 2 = PrWr;
+	int currentTransaction = 0;
+	
    currentCycle++;/*per cache global counter to maintain LRU order 
                     among cache ways, updated on every cache access*/
          
    if(op == 'w') writes++;
    else          reads++;
+   
+   if(op == 'w') currentTransaction = 2;
+   else			 currentTransaction = 1;
    
    cacheLine * line = findLine(addr);
    if(line == NULL)/*miss*/
@@ -64,6 +71,7 @@ void Cache::Access(ulong addr,uchar op)
 
       cacheLine *newline = fillLine(addr);
       if(op == 'w') newline->setFlags(DIRTY);    
+	  newline->setState(INVALIDATED);
       
    }
    else
@@ -72,7 +80,100 @@ void Cache::Access(ulong addr,uchar op)
       updateLRU(line);
       if(op == 'w') line->setFlags(DIRTY);
    }
+   
+   currentTransaction = line->doMsiReq();
+   Snooper(addr,op,currentTransaction);
+   
 }
+
+void Cache::Snooper(ulong addr, uchar op, int inst){
+	for(int i = 0; i < 4; i++){
+		cachesArray[proc]->doMsiSnoop(inst);
+	}
+}
+
+//Does the Requestor side State Machine for MSI
+int cacheLine::doMsiReq(int transaction){
+	
+	//returns bus intruction:
+	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
+	
+	// PrRd
+	if(transaction == 1){
+		if(isShared()){
+			return 0;					
+		} else if(isModified()){
+			return 0;			
+		}else if(isInvalidated()){
+			setState(SHARED);
+			return 1;
+		}
+	}
+	
+	//PrWr
+	else {
+		if(isShared()){
+			setState(MODIFIED);
+			return 3;
+		} else if(isModified()){
+			return 0;
+		}else if(isInvalidated()){
+			setState(Modified)
+			return 2;
+		}	
+	}
+}
+
+//Does the Snooper Side State Machine for MSI
+int cacheLine::doMsiSnoop(int transaction){
+	
+	//returns Cache intruction:
+	// 0: -, 1: Flush
+	
+	// -
+	if(transaction == 0) return 0;
+	
+	// BusRd
+	if(transaction == 1){
+		if(isShared()){
+			return 0;					
+		} else if(isModified()){
+			setState(SHARED);
+			return 1;
+		}else if(isInvalidated()){
+			return 0;
+		}
+	}
+	
+	//BusRdX
+	if(transaction == 2){
+		if(isShared()){
+			setState(INVALIDATED);
+			return 0;					
+		} else if(isModified()){
+			setState(INVALIDATED);
+			return 1;	
+		}else if(isInvalidated()){
+			return 0;
+		}
+	}
+	
+	//BusUpgr
+	if(transaction == 3){
+		if(isShared()){
+			setState(INVALIDATED);
+			return 0;					
+		} else if(isModified()){
+			return 0;	
+		}else if(isInvalidated()){
+			return 0;
+		}
+	}
+}
+
+
+
+
 
 /*look up line*/
 cacheLine * Cache::findLine(ulong addr)
