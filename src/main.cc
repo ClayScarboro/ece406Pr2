@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
     ulong proc;
     char op;
     ulong addr;
-	int inst;
 
     int line = 1;
     while(fscanf(pFile, "%lu %c %lx", &proc, &op, &addr) != EOF)
@@ -60,7 +59,7 @@ int main(int argc, char *argv[])
 #endif
 		//Cache and Requestor
 		printf("Debug 1\n");
-        inst = cacheArray[proc]->Access(addr,op);
+        cacheArray[proc]->Access(addr,op);
 		
 		//Snooper
 		printf("Debug 2\n");
