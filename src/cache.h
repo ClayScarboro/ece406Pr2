@@ -43,7 +43,7 @@ public:
    void invalidate()          { tag = 0; Flags = INVALID; } //useful function
    
    int doMsiReq(int);
-   void doMsiSnoop(int);
+   int doMsiSnoop(int);
    void doMsiBus();
    void doMESI();
    
