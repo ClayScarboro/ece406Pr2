@@ -83,8 +83,10 @@ int Cache::Access(ulong addr,uchar op)
       if(op == 'w') line->setFlags(DIRTY);
    }
    
+   
+   cacheLine * line2 = findLine(addr);
    printf("DEBUG3\n");
-   currentTransaction = line->doMsiReq(currentTransaction);
+   currentTransaction = line2->doMsiReq(currentTransaction);
    printf("DEBUG03\n");
    return currentTransaction;
    
