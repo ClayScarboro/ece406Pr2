@@ -87,7 +87,8 @@ int Cache::Access(ulong addr,uchar op)
 
 void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
-	line->doMsiSnoop(inst);
+	if (line == NULL) return; 
+	line->doMsiSnoop(inst); 
 }
 
 //Does the Requestor side State Machine for MSI
