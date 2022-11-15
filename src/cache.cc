@@ -281,12 +281,12 @@ cacheLine *Cache::fillLine(ulong addr)
 void Cache::printStats(int proc)
 { 
    printf("===== Simulation results (Cache %d) =====\n",proc);
-   printf("01. number of reads: %u\n",reads);
-   printf("02. number of read misses: %u\n",readMisses);
-   printf("03. number of writes: %u\n",writes);
-   printf("04. number of write misses: %u\n",writeMisses);
+   printf("01. number of reads: %lu\n",reads);
+   printf("02. number of read misses: %lu\n",readMisses);
+   printf("03. number of writes: %lu\n",writes);
+   printf("04. number of write misses: %lu\n",writeMisses);
    printf("05. total miss rate: %d %\n",totalMissRate);
-   printf("06. number of writebacks: %u\n",writeBacks);
+   printf("06. number of writebacks: %lu\n",writeBacks);
    printf("07. number of cache-to-cache transfers: %d\n",cache2cache);
    printf("08. number of memory transactions: %d\n",memoryTransactions);
    printf("09. number of interventions: %d\n",interventions);
