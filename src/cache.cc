@@ -116,7 +116,7 @@ int cacheLine::doMsiReq(int transaction){
 		} else if(isModified()){
 			return 0;
 		}else if(isInvalidated()){
-			setState(MODIFIED)
+			setState(MODIFIED);
 			return 2;
 		}	
 	}
