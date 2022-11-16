@@ -68,16 +68,58 @@ int main(int argc, char *argv[])
         //printf("%d\n", line);
 #endif
 		
-		//Cache and Requestor
-        inst = cacheArray[proc]->Access(addr,op);
-		
-		
-		//Snooper
-		for(ulong i = 0; i < num_processors; i++){
-			if(proc == i ) continue;
-			else cacheArray[i]->Snoop(addr,op,inst);
-		}
+		if(protocol == 0){
+		// --------------- MSI ------------------
+			//Cache and Requestor
+			inst = cacheArray[proc]->Access(addr,op);
 			
+			
+			//Snooper
+			for(ulong i = 0; i < num_processors; i++){
+				if(proc == i ) continue;
+				else cacheArray[i]->Snoop(addr,op,inst);
+			}
+		} if else (protocol == 1){
+			// --------------- MSIBusUpgr ------------------
+			//Cache and Requestor
+			inst = cacheArray[proc]->Access(addr,op);
+			
+			
+			//Snooper
+			for(ulong i = 0; i < num_processors; i++){
+				if(proc == i ) continue;
+				else cacheArray[i]->Snoop(addr,op,inst);
+			}
+
+
+		} if else (protocol == 2){
+			// --------------- MESI ------------------
+			//Cache and Requestor
+			inst = cacheArray[proc]->Access(addr,op);
+			
+			
+			//Snooper
+			for(ulong i = 0; i < num_processors; i++){
+				if(proc == i ) continue;
+				else cacheArray[i]->Snoop(addr,op,inst);
+			}
+
+
+		} if else (protocol == 3){
+			// --------------- MESI Snoop Filter ------------------
+			//Cache and Requestor
+			inst = cacheArray[proc]->Access(addr,op);
+			
+			
+			//Snooper
+			for(ulong i = 0; i < num_processors; i++){
+				if(proc == i ) continue;
+				else cacheArray[i]->Snoop(addr,op,inst);
+			}
+
+
+		}			
+		
         line++;
     }
 

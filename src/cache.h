@@ -87,7 +87,13 @@ public:
    
    void writeBack(ulong) {writeBacks++; memoryTransactions++;}
    int Access(ulong,uchar);
+   int AccessMSIBus(ulong,uchar);
+   int AccessMESI(ulong,uchar);
+   int AccessMESISnoop(ulong,uchar);
    void Snoop(ulong,uchar,int);
+   void SnoopMSIBus(ulong,uchar,int);
+   void SnoopMESI(ulong,uchar,int);
+   void SnoopMESISnoop(ulong,uchar,int);
    void printStats(int);
    void updateLRU(cacheLine *);
    int doMsiReq(cacheLine *,int);

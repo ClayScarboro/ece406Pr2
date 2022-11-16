@@ -99,6 +99,168 @@ int Cache::Access(ulong addr,uchar op)
   
 }
 
+int Cache::AccessMSIBus(ulong addr,uchar op)
+{
+	
+	// 1 = PrRd; 2 = PrWr;
+	int currentTransaction = 0;
+	int snoopTransaction = 0;
+	
+   currentCycle++;/*per cache global counter to maintain LRU order 
+                    among cache ways, updated on every cache access*/
+         
+   if(op == 'w') writes++;
+   else          reads++;
+   
+   if(op == 'w') currentTransaction = 2;
+   else			 currentTransaction = 1;
+   
+   cacheLine * line = findLine(addr);
+   if(line == NULL)/*miss*/
+   {
+      if(op == 'w') writeMisses++;
+      else {
+		  memoryTransactions++;
+		  readMisses++;
+	  }
+	  
+      cacheLine *newline = fillLine(addr);
+      //if(op == 'w')	newline->setFlags(MODIFIED);   
+      snoopTransaction = doMsiReq(newline,currentTransaction);
+	  
+   } 
+   else 
+   {
+      /**since it's a hit, update LRU and update dirty flag**/
+      updateLRU(line);
+      //if(op == 'w') line->setFlags(MODIFIED);
+	  snoopTransaction = doMsiReq(line,currentTransaction);
+   }
+   
+   
+   
+   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   //else if (snoopTransaction == 3) BusUpgr++;
+   return snoopTransaction;
+  
+}
+
+int Cache::AccessMESI(ulong addr,uchar op)
+{
+	
+	// 1 = PrRd; 2 = PrWr;
+	int currentTransaction = 0;
+	int snoopTransaction = 0;
+	
+   currentCycle++;/*per cache global counter to maintain LRU order 
+                    among cache ways, updated on every cache access*/
+         
+   if(op == 'w') writes++;
+   else          reads++;
+   
+   if(op == 'w') currentTransaction = 2;
+   else			 currentTransaction = 1;
+   
+   cacheLine * line = findLine(addr);
+   if(line == NULL)/*miss*/
+   {
+      if(op == 'w') writeMisses++;
+      else {
+		  memoryTransactions++;
+		  readMisses++;
+	  }
+	  
+      cacheLine *newline = fillLine(addr);
+      //if(op == 'w')	newline->setFlags(MODIFIED);   
+      snoopTransaction = doMsiReq(newline,currentTransaction);
+	  
+   } 
+   else 
+   {
+      /**since it's a hit, update LRU and update dirty flag**/
+      updateLRU(line);
+      //if(op == 'w') line->setFlags(MODIFIED);
+	  snoopTransaction = doMsiReq(line,currentTransaction);
+   }
+   
+   
+   
+   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   //else if (snoopTransaction == 3) BusUpgr++;
+   return snoopTransaction;
+  
+}
+
+int Cache::AccessMESISnoop(ulong addr,uchar op)
+{
+	
+	// 1 = PrRd; 2 = PrWr;
+	int currentTransaction = 0;
+	int snoopTransaction = 0;
+	
+   currentCycle++;/*per cache global counter to maintain LRU order 
+                    among cache ways, updated on every cache access*/
+         
+   if(op == 'w') writes++;
+   else          reads++;
+   
+   if(op == 'w') currentTransaction = 2;
+   else			 currentTransaction = 1;
+   
+   cacheLine * line = findLine(addr);
+   if(line == NULL)/*miss*/
+   {
+      if(op == 'w') writeMisses++;
+      else {
+		  memoryTransactions++;
+		  readMisses++;
+	  }
+	  
+      cacheLine *newline = fillLine(addr);
+      //if(op == 'w')	newline->setFlags(MODIFIED);   
+      snoopTransaction = doMsiReq(newline,currentTransaction);
+	  
+   } 
+   else 
+   {
+      /**since it's a hit, update LRU and update dirty flag**/
+      updateLRU(line);
+      //if(op == 'w') line->setFlags(MODIFIED);
+	  snoopTransaction = doMsiReq(line,currentTransaction);
+   }
+   
+   
+   
+   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   //else if (snoopTransaction == 3) BusUpgr++;
+   return snoopTransaction;
+  
+}
+
+void Cache::Snoop(ulong addr, uchar op, int inst){
+	cacheLine * line = findLine(addr);
+	int doFlush;
+	if (line == NULL) return;
+	doFlush = doMsiSnoop(line,inst); 
+	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
+}
+
+void Cache::Snoop(ulong addr, uchar op, int inst){
+	cacheLine * line = findLine(addr);
+	int doFlush;
+	if (line == NULL) return;
+	doFlush = doMsiSnoop(line,inst); 
+	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
+}
+
+void Cache::Snoop(ulong addr, uchar op, int inst){
+	cacheLine * line = findLine(addr);
+	int doFlush;
+	if (line == NULL) return;
+	doFlush = doMsiSnoop(line,inst); 
+	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
+}
+
 void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
