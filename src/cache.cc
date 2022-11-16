@@ -104,7 +104,8 @@ int Cache::Access(ulong addr,uchar op)
 void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
-	if (line == NULL) return; 
+	if (line == NULL) return;
+	printf("HAPPENING");	
 	doFlush = doMsiSnoop(line,inst); 
 	if(doFlush == 2 || doFlush == -2) ++flushes;
 }
