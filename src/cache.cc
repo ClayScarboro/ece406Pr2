@@ -93,7 +93,7 @@ int Cache::Access(ulong addr,uchar op)
    
    cacheLine * line2 = findLine(addr);
    
-   currentTransaction = doMsiReq(line2,currentTransaction);
+   currentTransaction = doMsiReq(addr,currentTransaction);
    
    if (currentTransaction == 2) BusRdX++;
    else if (currentTransaction == 3) BusUpgr++;
