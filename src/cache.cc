@@ -90,6 +90,8 @@ int Cache::Access(ulong addr,uchar op)
       if(op == 'w') line->setFlags(MODIFIED);
    }
    
+   cacheLine * line2 = findLine(addr);
+   line2->isShared();
    currentTransaction = doMsiReq(addr,currentTransaction);
    
    if (currentTransaction == 2) BusRdX++;
@@ -110,7 +112,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 //Does the Requestor side State Machine for MSI
 int Cache::doMsiReq(ulong addr,int transaction){
 	cacheLine * line = findLine(addr);
-	line->invalidate();
+	
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
 	
