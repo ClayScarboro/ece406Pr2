@@ -94,16 +94,19 @@ int Cache::Access(ulong addr,uchar op)
    
    cacheLine * line2 = findLine(addr);
    currentTransaction = line2->doMsiReq(currentTransaction);
+   if (currentTransaction == 2) BusRdX++;
+   else if (currentTransaction == 3) BusUpgr++;
    return currentTransaction;
    
 }
 
 void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
-	int doFlush
+	int doFlush;
 	if (line == NULL) return; 
 	doFlush = line->doMsiSnoop(inst); 
-	if (doFlush()) flushes++;
+	if(doFlush < 0) ++invalidations);
+	if(doFlush == 2 || doFlush == -2) ++flushes;
 }
 
 //Does the Requestor side State Machine for MSI
@@ -144,7 +147,7 @@ int cacheLine::doMsiReq(int transaction){
 int cacheLine::doMsiSnoop(int transaction){
 	
 	//returns Cache intruction:
-	// 0: -, 1: Flush
+	// 1: -, 2: Flush, -# = flush;
 	
 	// -
 	if(transaction == 0) return 0;
@@ -152,41 +155,39 @@ int cacheLine::doMsiSnoop(int transaction){
 	// BusRd
 	if(transaction == 1){
 		if(isShared()){
-			return 0;					
+			return 1;					
 		} else if(isModified()){
 			setState(SHARED);
-			return 1;
+			return 2;
 		}else if(isInvalidated()){
-			return 0;
+			return 1;
 		}
 	}
 	
 	//BusRdX
 	if(transaction == 2){
-		BusRdX++;
 		if(isShared()){
 			setState(INVALIDATED);
-			invalidations++;
-			return 0;					
+			
+			return -1;					
 		} else if(isModified()){
 			setState(INVALIDATED);
-			invalidations++;
-			return 1;	
+			
+			return -2;	
 		}else if(isInvalidated()){
-			return 0;
+			return 1;
 		}
 	}
 	
 	//BusUpgr
 	if(transaction == 3){
-		BusUpgr++;
 		if(isShared()){
 			setState(INVALIDATED);
-			return 0;					
+			return -1;					
 		} else if(isModified()){
-			return 0;	
+			return 1;	
 		}else if(isInvalidated()){
-			return 0;
+			return 1;
 		}
 	}
 	
