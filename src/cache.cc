@@ -119,7 +119,7 @@ int cacheLine::doMsiReq(int transaction){
 	
 	// PrRd
 	if(transaction == 1){
-		printf("DEbug1d\n");;
+		printf("DEbug66d\n");;
 		if(isShared()){
 			printf("DEbug2d\n");;
 			return 0;					
