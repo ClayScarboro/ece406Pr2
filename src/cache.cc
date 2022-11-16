@@ -94,7 +94,7 @@ int Cache::Access(ulong addr,uchar op)
    
    cacheLine * line2 = findLine(addr);
    
-   currentTransaction = doMsiReq(line2);
+   currentTransaction = doMsiReq(line2,currentTransaction);
    
    if (currentTransaction == 2) BusRdX++;
    else if (currentTransaction == 3) BusUpgr++;
@@ -128,7 +128,7 @@ int Cache::doMsiReq(cacheLine * line){
 			return 0;			
 		}else if(line->isInvalidated()){
 			printf("DEbug4d\n");
-			setFlags(SHARED);
+			line->setFlags(SHARED);
 			printf("DEbug5d\n");
 			return 1;
 		}
@@ -138,12 +138,12 @@ int Cache::doMsiReq(cacheLine * line){
 	else {
 		printf("DEbug3d\n");;
 		if(line->isShared()){
-			setFlags(MODIFIED);
+			line->setFlags(MODIFIED);
 			return 3;
 		} else if(line->isModified()){
 			return 0;
 		}else if(line->isInvalidated()){
-			setFlags(MODIFIED);
+			line->setFlags(MODIFIED);
 			return 2;
 		}	
 	}
@@ -165,7 +165,7 @@ int Cache::doMsiSnoop(cacheLine * line){
 		if(line->isShared()){
 			return 1;					
 		} else if(line->isModified()){
-			setFlags(SHARED);
+			line->setFlags(SHARED);
 			return 2;
 		}else if(line->isInvalidated()){
 			return 1;
@@ -175,11 +175,11 @@ int Cache::doMsiSnoop(cacheLine * line){
 	//BusRdX
 	if(transaction == 2){
 		if(line->isShared()){
-			setFlags(INVALID);
+			line->setFlags(INVALID);
 			
 			return -1;					
 		} else if(line->isModified()){
-			setFlags(INVALID);
+			line->setFlags(INVALID);
 			
 			return -2;	
 		}else if(line->isInvalidated()){
@@ -190,7 +190,7 @@ int Cache::doMsiSnoop(cacheLine * line){
 	//BusUpgr
 	if(transaction == 3){
 		if(isShared()){
-			setFlags(INVALID);
+			line->setFlags(INVALID);
 			return -1;					
 		} else if(isModified()){
 			return 1;	

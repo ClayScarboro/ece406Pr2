@@ -90,8 +90,8 @@ public:
    void Snoop(ulong,uchar,int);
    void printStats(int);
    void updateLRU(cacheLine *);
-   int doMsiReq(cacheLine *);
-   int doMsiSnoop(cacheLine *);
+   int doMsiReq(cacheLine *,int);
+   int doMsiSnoop(cacheLine *.int);
    void doMsiBus();
    void doMESI();
 
