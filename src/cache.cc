@@ -95,8 +95,8 @@ int Cache::Access(ulong addr,uchar op)
    
    printf("SnoopTrans: %d\n",snoopTransaction);
    
-   if (snoopTransaction == 2) BusRdX++;
-   else if (snoopTransaction == 3) BusUpgr++;
+   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   //else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
   
 }
