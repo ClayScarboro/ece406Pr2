@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 			
 			int onlyCopy = 1;
 			for(ulong i = 0; i < num_processors; i++){
-				cahceLine * check;
+				cacheLine * check;
 				if(proc == i ) continue;
 				else check = cacheArray[i]->findLine(addr,op,inst);
 				if(check != NULL) onlyCopy = 0;
