@@ -58,15 +58,17 @@ int main(int argc, char *argv[])
 #ifdef _DEBUG
         printf("%d\n", line);
 #endif
+		printf("debug1\n");
 		//Cache and Requestor
         inst = cacheArray[proc]->Access(addr,op);
 		
+		printf("debug2\n");
 		//Snooper
 		for(int i = 0; i < 4; i++){
 			if(inst == i ) continue;
 			else cacheArray[proc]->Snoop(addr,op,inst);
 		}
-			
+			printf("debug3\n");
         line++;
     }
 
