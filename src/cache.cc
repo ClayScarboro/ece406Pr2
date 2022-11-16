@@ -81,7 +81,7 @@ int Cache::Access(ulong addr,uchar op)
 	  }
 	  
       cacheLine *newline = fillLine(addr);
-      if(op == 'w')	newline->setFlags(MODIFIED);   
+      //if(op == 'w')	newline->setFlags(MODIFIED);   
       snoopTransaction = doMsiReq(newline,currentTransaction);
 	  
    } 
@@ -89,7 +89,7 @@ int Cache::Access(ulong addr,uchar op)
    {
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
-      if(op == 'w') line->setFlags(MODIFIED);
+      //if(op == 'w') line->setFlags(MODIFIED);
 	  snoopTransaction = doMsiReq(line,currentTransaction);
    }
    
@@ -105,7 +105,6 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
-	printf("HAPPENING");	
 	doFlush = doMsiSnoop(line,inst); 
 	if(doFlush == 2 || doFlush == -2) ++flushes;
 }
