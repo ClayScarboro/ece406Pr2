@@ -189,12 +189,12 @@ int Cache::doMsiSnoop(cacheLine * line, int transaction){
 	
 	//BusUpgr
 	if(transaction == 3){
-		if(isShared()){
+		if(line->isShared()){
 			line->setFlags(INVALID);
 			return -1;					
-		} else if(isModified()){
+		} else if(line->isModified()){
 			return 1;	
-		}else if(isInvalidated()){
+		}else if(line->isInvalidated()){
 			return 1;
 		}
 	}
