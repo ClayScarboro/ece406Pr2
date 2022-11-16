@@ -298,7 +298,7 @@ void Cache::printStats(int proc)
    printf("02. number of read misses: %lu\n",readMisses);
    printf("03. number of writes: %lu\n",writes);
    printf("04. number of write misses: %lu\n",writeMisses);
-   printf("05. total miss rate: %.2f",totalMissRate);
+   printf("05. total miss rate: %2.2f",totalMissRate);
    printf("%%\n");
    printf("06. number of writebacks: %lu\n",writeBacks);
    printf("07. number of cache-to-cache transfers: %d\n",cache2cache);
