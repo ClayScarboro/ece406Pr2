@@ -132,7 +132,7 @@ int cacheLine::doMsiReq(int transaction){
 	
 	//PrWr
 	else {
-		printf("DEbug2d\n");;
+		printf("DEbug3d\n");;
 		if(isShared()){
 			setFlags(MODIFIED);
 			return 3;
