@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     char *fname        = (char *) malloc(20);
     fname              = argv[6];
 
-    printf("===== Simulator configuration =====\n");
+    printf("===== 506 Coherence Simulator Configuration =====\n");
     printf("L1_SIZE: %lu\n",cache_size);
 	printf("L1_ASSOC: %lu\n",cache_assoc);
 	printf("L1_BLOCKSIZE: %lu\n",blk_size);
