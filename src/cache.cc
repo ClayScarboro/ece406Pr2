@@ -167,7 +167,7 @@ int Cache::AccessMESI(ulong addr,uchar op, int onlyCopy)
    {
       if(op == 'w') writeMisses++;
       else {
-		  memoryTransactions++;
+		  
 		  readMisses++;
 	  }
 	  
@@ -186,7 +186,7 @@ int Cache::AccessMESI(ulong addr,uchar op, int onlyCopy)
    
    
    
-   if (snoopTransaction == 2){ cache2cache++; BusRdX++;  }
+   if (snoopTransaction == 2){ cache2cache++; BusRdX++; memoryTransactions++; }
 else if (snoopTransaction == 3) { BusUpgr++; memoryTransactions++; }
    return snoopTransaction;
   
