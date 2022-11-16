@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		
 		
 		//Snooper
-		for(ulong i = 0; i < (num_processors; i++){
+		for(ulong i = 0; i < num_processors; i++){
 			if(proc == i ) continue;
 			else cacheArray[i]->Snoop(addr,op,inst);
 		}
