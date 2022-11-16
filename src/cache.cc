@@ -58,7 +58,7 @@ int Cache::Access(ulong addr,uchar op)
 	
 	// 1 = PrRd; 2 = PrWr;
 	int currentTransaction = 0;
-	printf("DEbug1\n");
+	
    currentCycle++;/*per cache global counter to maintain LRU order 
                     among cache ways, updated on every cache access*/
          
@@ -76,12 +76,12 @@ int Cache::Access(ulong addr,uchar op)
 		  memoryTransactions++;
 		  readMisses++;
 	  }
-	  printf("DEbug3\n");
+	  
       cacheLine *newline = fillLine(addr);
       if(op == 'w')		  newline->setFlags(MODIFIED);   
 	 
 	  newline->setFlags(INVALID);
-	  printf("DEbug5\n");
+	  
       
    } 
    else 
@@ -90,16 +90,16 @@ int Cache::Access(ulong addr,uchar op)
       updateLRU(line);
       if(op == 'w') line->setFlags(MODIFIED);
    }
-   printf("DEbug2\n");;
+   
    
    cacheLine * line2 = findLine(addr);
-   printf("DEbug2d\n");;
+   
    currentTransaction = line2->doMsiReq(currentTransaction);
-   printf("DEbug2222\n");;
+   
    if (currentTransaction == 2) BusRdX++;
    else if (currentTransaction == 3) BusUpgr++;
    return currentTransaction;
-   printf("DEbug2\n");;
+  
 }
 
 void Cache::Snoop(ulong addr, uchar op, int inst){
@@ -141,7 +141,7 @@ int cacheLine::doMsiReq(int transaction){
 			return 2;
 		}	
 	}
-	
+	printf("DEbug2d\n");;
 	return 0;
 }
 
