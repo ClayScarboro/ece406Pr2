@@ -167,11 +167,11 @@ int Cache::doMsiSnoop(cacheLine * line, int transaction){
 	if(transaction == 2){
 		if(line->isShared()){
 			line->invalidate();
-			
+			invalidations++;
 			return -1;					
 		} else if(line->isModified()){
 			line->invalidate();
-			
+			invalidations++;
 			return -2;	
 		}else if(line->isInvalidated()){
 			return 1;
