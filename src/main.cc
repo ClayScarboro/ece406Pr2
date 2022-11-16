@@ -82,39 +82,39 @@ int main(int argc, char *argv[])
 		} if else (protocol == 1){
 			// --------------- MSIBusUpgr ------------------
 			//Cache and Requestor
-			inst = cacheArray[proc]->Access(addr,op);
+			inst = cacheArray[proc]->AccessMSIBus(addr,op);
 			
 			
 			//Snooper
 			for(ulong i = 0; i < num_processors; i++){
 				if(proc == i ) continue;
-				else cacheArray[i]->Snoop(addr,op,inst);
+				else cacheArray[i]->SnoopMSIBus(addr,op,inst);
 			}
 
 
 		} if else (protocol == 2){
 			// --------------- MESI ------------------
 			//Cache and Requestor
-			inst = cacheArray[proc]->Access(addr,op);
+			inst = cacheArray[proc]->AccessMESI(addr,op);
 			
 			
 			//Snooper
 			for(ulong i = 0; i < num_processors; i++){
 				if(proc == i ) continue;
-				else cacheArray[i]->Snoop(addr,op,inst);
+				else cacheArray[i]->SnoopMESI(addr,op,inst);
 			}
 
 
 		} if else (protocol == 3){
 			// --------------- MESI Snoop Filter ------------------
 			//Cache and Requestor
-			inst = cacheArray[proc]->Access(addr,op);
+			inst = cacheArray[proc]->AccessMESISnoop(addr,op);
 			
 			
 			//Snooper
 			for(ulong i = 0; i < num_processors; i++){
 				if(proc == i ) continue;
-				else cacheArray[i]->Snoop(addr,op,inst);
+				else cacheArray[i]->SnoopMESISnoop(addr,op,inst);
 			}
 
 
