@@ -81,7 +81,7 @@ int Cache::Access(ulong addr,uchar op)
       if(op == 'w')	newline->setFlags(MODIFIED);   
 	  newline->setFlags(INVALID);
 	  printf("debug1\n");
-      newline->isInvalidated();
+      currentTransaction = doMsiReq(newline,currentTransaction);
 	  printf("debug12\n");
    } 
    else 
@@ -89,10 +89,8 @@ int Cache::Access(ulong addr,uchar op)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       if(op == 'w') line->setFlags(MODIFIED);
+	  currentTransaction = doMsiReq(line,currentTransaction);
    }
-   
-   
-   currentTransaction = doMsiReq(addr,currentTransaction);
    
    if (currentTransaction == 2) BusRdX++;
    else if (currentTransaction == 3) BusUpgr++;
@@ -110,8 +108,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 }
 
 //Does the Requestor side State Machine for MSI
-int Cache::doMsiReq(ulong addr,int transaction){
-	cacheLine * line = findLine(addr);
+int Cache::doMsiReq(cacheLine * line,int transaction){
 	
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
