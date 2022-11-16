@@ -140,12 +140,13 @@ int Cache::AccessMSIBus(ulong addr,uchar op)
    
    
    if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   if (snoopTransaction == 3){ BusUpgr++; memoryTransactions++; }
    //else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
   
 }
 
-int Cache::AccessMESI(ulong addr,uchar op)
+int Cache::AccessMESI(ulong addr,uchar op, int onlyCopy)
 {
 	
 	// 1 = PrRd; 2 = PrWr;
@@ -180,7 +181,7 @@ int Cache::AccessMESI(ulong addr,uchar op)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       //if(op == 'w') line->setFlags(MODIFIED);
-	  snoopTransaction = doMESIReq(line,currentTransaction);
+	  snoopTransaction = doMESIReq(line,currentTransaction,onlyCopy);
    }
    
    
@@ -191,7 +192,7 @@ int Cache::AccessMESI(ulong addr,uchar op)
   
 }
 
-int Cache::AccessMESISnoop(ulong addr,uchar op)
+int Cache::AccessMESISnoop(ulong addr,uchar op, int onlyCopy)
 {
 	
 	// 1 = PrRd; 2 = PrWr;
@@ -314,7 +315,7 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 int Cache::doMsiBusReq(cacheLine * line,int transaction){
 	
 	//returns bus intruction:
-	// 0: -, 1: BusRd, 2: BusRdX
+	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
 	
 	// PrRd
 	if(transaction == 1){
@@ -338,7 +339,7 @@ int Cache::doMsiBusReq(cacheLine * line,int transaction){
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
 			
-			return 2;
+			return 3;
 		} else if(line->isModified()){
 			
 			return 0;
@@ -352,41 +353,40 @@ int Cache::doMsiBusReq(cacheLine * line,int transaction){
 	return 0;
 }
 
-int Cache::doMESIReq(cacheLine * line,int transaction){
+int Cache::doMESIReq(cacheLine * line,int transaction, int onlyCopy){
 	
 	//returns bus intruction:
-	// 0: -, 1: BusRd, 2: BusRdX
+	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
 	
 	// PrRd
 	if(transaction == 1){
 		
 		if(line->isShared()){
-			
 			return 0;					
 		} else if(line->isModified()){
-			
 			return 0;			
 		}else if(line->isInvalidated()){
-			
-			line->setFlags(SHARED);
+			if(onlyCopy) line->setFlags(EXCLUSIVE);
+			else line->setFlags(SHARED);
 			return 1;
+		}else if(line->isExclusive()){
+			return 0;
 		}
 	}
 	
 	//PrWr
 	else {
-
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
-			
-			return 2;
+			return 3;					
 		} else if(line->isModified()){
-			
-			return 0;
+			return 0;			
 		}else if(line->isInvalidated()){
 			line->setFlags(MODIFIED);
-			
 			return 2;
+		}else if(line->isExclusive()){
+			line->setFlags(MODIFIED);
+			return 0;
 		}	
 	}
 	
@@ -509,6 +509,19 @@ int Cache::doMsiBusSnoop(cacheLine * line, int transaction){
 			return 1;
 		}
 	}
+	
+	//BusUpgr
+	if(transaction == 3){
+		if(line->isShared()){
+			line->invalidate();
+			invalidations++;
+			return 1;					
+		} else if(line->isModified()){
+			return 1;	
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
 	return 0;
 	
 }
@@ -516,7 +529,7 @@ int Cache::doMsiBusSnoop(cacheLine * line, int transaction){
 int Cache::doMESISnoop(cacheLine * line, int transaction){
 	
 	//returns Cache intruction:
-	// 1: -, 2: Flush, -# = flush;
+	// 1: -, 2: Flush, 3: FlushOpt -# = flush;
 	
 	// -
 	if(transaction == 0) return 0;
@@ -524,13 +537,17 @@ int Cache::doMESISnoop(cacheLine * line, int transaction){
 	// BusRd
 	if(transaction == 1){
 		if(line->isShared()){
-			return 1;					
+			return 3;					
 		} else if(line->isModified()){
 			line->setFlags(SHARED);
 			interventions++;
 			return 2;
 		}else if(line->isInvalidated()){
 			return 1;
+		}else if(line->isExclusive()){
+			line->setFlags(SHARED);
+			interventions++;
+			return 3;
 		}
 	}
 	
@@ -539,12 +556,31 @@ int Cache::doMESISnoop(cacheLine * line, int transaction){
 		if(line->isShared()){
 			line->invalidate();
 			invalidations++;
-			return -1;					
+			return 3;
 		} else if(line->isModified()){
 			line->invalidate();
 			invalidations++;
-			return -2;	
+			return 2;
 		}else if(line->isInvalidated()){
+			return 1;
+		}else if(line->isExclusive()){
+			line->invalidate();
+			invalidations++;
+			return 3;
+		}
+	}
+	
+	//BusUpgr
+	if(transaction == 3){
+		if(line->isShared()){
+			line->invalidate();
+			invalidations++;
+			return 1;					
+		} else if(line->isModified()){
+			return 1;
+		}else if(line->isInvalidated()){
+			return 1;
+		}else if(line->isExclusive()){
 			return 1;
 		}
 	}

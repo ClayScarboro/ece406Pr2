@@ -8,7 +8,6 @@
 using namespace std;
 
 #include "cache.h"
-
 int main(int argc, char *argv[])
 {
     
@@ -95,7 +94,16 @@ int main(int argc, char *argv[])
 		} else if (protocol == 2){
 			// --------------- MESI ------------------
 			//Cache and Requestor
-			inst = cacheArray[proc]->AccessMESI(addr,op);
+			
+			int onlyCopy = 1;
+			for(ulong i = 0; i < num_processors; i++){
+				cahceLine * check;
+				if(proc == i ) continue;
+				else check = cacheArray[i]->findLine(addr,op,inst);
+				if(check != NULL) onlyCopy = 0;
+			}
+			
+			inst = cacheArray[proc]->AccessMESI(addr,op,onlyCopy);
 			
 			
 			//Snooper

@@ -17,6 +17,7 @@ enum {
    INVALID = 0,
    SHARED,
    MODIFIED,
+   EXCLUSIVE,
 };
 
 class cacheLine 
@@ -40,6 +41,7 @@ public:
    bool isShared()             { return ((Flags) == SHARED); }
    bool isModified()             { return ((Flags) == MODIFIED); }
    bool isInvalidated()             { return ((Flags) == INVALID); }
+   bool isExclusive()             { return ((Flags) == EXCLUSIVE); }
 };
 
 class Cache
@@ -88,8 +90,8 @@ public:
    void writeBack(ulong) {writeBacks++; memoryTransactions++;}
    int Access(ulong,uchar);
    int AccessMSIBus(ulong,uchar);
-   int AccessMESI(ulong,uchar);
-   int AccessMESISnoop(ulong,uchar);
+   int AccessMESI(ulong,uchar,int);
+   int AccessMESISnoop(ulong,uchar,int);
    void Snoop(ulong,uchar,int);
    void SnoopMSIBus(ulong,uchar,int);
    void SnoopMESI(ulong,uchar,int);
@@ -100,14 +102,16 @@ public:
    int doMsiSnoop(cacheLine *,int);
    int doMsiBusReq(cacheLine *,int);
    int doMsiBusSnoop(cacheLine *,int);
-   int doMESIReq(cacheLine *,int);
+   int doMESIReq(cacheLine *,int,int);
    int doMESISnoop(cacheLine *,int);
-   int doMESISnoopReq(cacheLine *,int);
+   int doMESISnoopReq(cacheLine *,int,int);
    int doMESISnoopSnoop(cacheLine *,int);
 
    //******///
    //add other functions to handle bus transactions///
    //******///
+   //returns bus intruction:
+	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
 
 };
 
