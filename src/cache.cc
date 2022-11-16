@@ -291,7 +291,7 @@ cacheLine *Cache::fillLine(ulong addr)
 void Cache::printStats(int proc)
 { 
 
-	totalMissRate = ((float) (readMisses + writeMisses)) / (reads + writes);
+	totalMissRate = (((float) (readMisses + writeMisses)) / (reads + writes)) * 100;
 
    printf("===== Simulation results (Cache %d) =====\n",proc);
    printf("01. number of reads: %lu\n",reads);
