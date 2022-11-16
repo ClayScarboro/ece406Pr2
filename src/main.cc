@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 				if(proc == i ) continue;
 				else cacheArray[i]->Snoop(addr,op,inst);
 			}
-		} if else (protocol == 1){
+		} else if (protocol == 1){
 			// --------------- MSIBusUpgr ------------------
 			//Cache and Requestor
 			inst = cacheArray[proc]->AccessMSIBus(addr,op);
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 			}
 
 
-		} if else (protocol == 2){
+		} else if (protocol == 2){
 			// --------------- MESI ------------------
 			//Cache and Requestor
 			inst = cacheArray[proc]->AccessMESI(addr,op);
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 			}
 
 
-		} if else (protocol == 3){
+		} else if (protocol == 3){
 			// --------------- MESI Snoop Filter ------------------
 			//Cache and Requestor
 			inst = cacheArray[proc]->AccessMESISnoop(addr,op);
