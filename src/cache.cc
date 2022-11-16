@@ -80,9 +80,9 @@ int Cache::Access(ulong addr,uchar op)
       cacheLine *newline = fillLine(addr);
       if(op == 'w')	newline->setFlags(MODIFIED);   
 	  newline->setFlags(INVALID);
-	  printf("debug1\n");
+	  
       currentTransaction = doMsiReq(newline,currentTransaction);
-	  printf("debug12\n");
+	  
    } 
    else 
    {
@@ -115,24 +115,24 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 	
 	// PrRd
 	if(transaction == 1){
-		printf("DEbug66d\n");
+		
 		if(line->isShared()){
-			printf("DEbug2d\n");
+			
 			return 0;					
 		} else if(line->isModified()){
-			printf("DEbug3d\n");
+			
 			return 0;			
 		}else if(line->isInvalidated()){
-			printf("DEbug4d\n");
+			
 			line->setFlags(SHARED);
-			printf("DEbug5d\n");
+			
 			return 1;
 		}
 	}
 	
 	//PrWr
 	else {
-		printf("DEbug3d\n");
+		
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
 			return 3;
@@ -143,7 +143,7 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 			return 2;
 		}	
 	}
-	printf("DEbug2d\n");
+	
 	return 0;
 }
 
