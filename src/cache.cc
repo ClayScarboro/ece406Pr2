@@ -58,6 +58,7 @@ int Cache::Access(ulong addr,uchar op)
 	
 	// 1 = PrRd; 2 = PrWr;
 	int currentTransaction = 0;
+	int snoopTransaction = 0;
 	
    currentCycle++;/*per cache global counter to maintain LRU order 
                     among cache ways, updated on every cache access*/
@@ -79,7 +80,7 @@ int Cache::Access(ulong addr,uchar op)
 	  
       cacheLine *newline = fillLine(addr);
       if(op == 'w')	newline->setFlags(MODIFIED);   
-      currentTransaction = doMsiReq(newline,currentTransaction);
+      snoopTransaction = doMsiReq(newline,currentTransaction);
 	  
    } 
    else 
@@ -87,12 +88,12 @@ int Cache::Access(ulong addr,uchar op)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       if(op == 'w') line->setFlags(MODIFIED);
-	  currentTransaction = doMsiReq(line,currentTransaction);
+	  snoopTransaction = doMsiReq(line,currentTransaction);
    }
    
-   if (currentTransaction == 2) BusRdX++;
-   else if (currentTransaction == 3) BusUpgr++;
-   return currentTransaction;
+   if (snoopTransaction == 2) BusRdX++;
+   else if (snoopTransaction == 3) BusUpgr++;
+   return snoopTransaction;
   
 }
 
