@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     // Using pointers so that we can use inheritance */
     Cache** cacheArray = (Cache **) malloc(num_processors * sizeof(Cache));
     for(ulong i = 0; i < num_processors; i++) {
-       // if(protocol == 0) {
+		// if(protocol == 0) {
             cacheArray[i] = new Cache(cache_size, cache_assoc, blk_size);
         //}
     }
@@ -78,5 +78,4 @@ int main(int argc, char *argv[])
 		cacheArray[i]->printStats(i);
 	}
     
-	return 0;
 }
