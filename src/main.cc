@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 			for(ulong i = 0; i < num_processors; i++){
 				cacheLine * check;
 				if(proc == i ) continue;
-				else check = cacheArray[i]->findLine(addr,op,inst);
+				else check = cacheArray[i]->findLine(addr);
 				if(check != NULL) onlyCopy = 0;
 			}
 			
@@ -116,7 +116,17 @@ int main(int argc, char *argv[])
 		} else if (protocol == 3){
 			// --------------- MESI Snoop Filter ------------------
 			//Cache and Requestor
-			inst = cacheArray[proc]->AccessMESISnoop(addr,op);
+			
+			int onlyCopy = 1;
+			for(ulong i = 0; i < num_processors; i++){
+				cacheLine * check;
+				if(proc == i ) continue;
+				else check = cacheArray[i]->findLine(addr);
+				if(check != NULL) onlyCopy = 0;
+			}
+			
+			
+			inst = cacheArray[proc]->AccessMESISnoop(addr,op,onlyCopy);
 			
 			
 			//Snooper
