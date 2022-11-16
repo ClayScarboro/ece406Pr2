@@ -93,7 +93,7 @@ int Cache::Access(ulong addr,uchar op)
    
    
    
-   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   if (snoopTransaction == 2){  BusRdX++; memoryTransactions++; }
    //else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
   
@@ -139,7 +139,7 @@ int Cache::AccessMSIBus(ulong addr,uchar op)
    
    
    
-   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   if (snoopTransaction == 2){  BusRdX++; memoryTransactions++; }
    if (snoopTransaction == 3){ BusUpgr++; memoryTransactions++; }
    //else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
@@ -186,7 +186,7 @@ int Cache::AccessMESI(ulong addr,uchar op, int onlyCopy)
    
    
    
-   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   if (snoopTransaction == 2){ cache2cache++; BusRdX++; memoryTransactions++; }
    //else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
   
@@ -232,7 +232,7 @@ int Cache::AccessMESISnoop(ulong addr,uchar op, int onlyCopy)
    
    
    
-   if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
+   if (snoopTransaction == 2){ cache2cache++; BusRdX++; memoryTransactions++; }
    //else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
   
