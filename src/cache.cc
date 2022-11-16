@@ -104,7 +104,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	int doFlush;
 	if (line == NULL) return;
 	doFlush = doMsiSnoop(line,inst); 
-	if(doFlush == 2 || doFlush == -2) ++flushes;
+	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++flushes; }
 }
 
 //Does the Requestor side State Machine for MSI
