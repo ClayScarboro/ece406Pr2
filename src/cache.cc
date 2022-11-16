@@ -245,7 +245,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
 
-void Cache::Snoop(ulong addr, uchar op, int inst){
+void Cache::SnoopMSIBus(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
@@ -253,7 +253,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
 
-void Cache::Snoop(ulong addr, uchar op, int inst){
+void Cache::SnoopMESI(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
@@ -261,7 +261,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
 
-void Cache::Snoop(ulong addr, uchar op, int inst){
+void Cache::SnoopMESISnoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
