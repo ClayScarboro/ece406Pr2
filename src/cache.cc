@@ -552,7 +552,7 @@ int Cache::doMESISnoop(cacheLine * line, int transaction){
 	
 }
 
-int Cache::doMESISnoopSnoopcacheLine * line, int transaction){
+int Cache::doMESISnoopSnoop (cacheLine * line, int transaction){
 	
 	//returns Cache intruction:
 	// 1: -, 2: Flush, -# = flush;
