@@ -93,7 +93,7 @@ int Cache::Access(ulong addr,uchar op)
 	  snoopTransaction = doMsiReq(line,currentTransaction);
    }
    
-   printf("SnoopTrans: %d\n",snoopTransaction);
+   
    
    if (snoopTransaction == 2){ BusRdX++; memoryTransactions++; }
    //else if (snoopTransaction == 3) BusUpgr++;
@@ -117,15 +117,15 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 	
 	// PrRd
 	if(transaction == 1){
-		printf("read:");
+		
 		if(line->isShared()){
-			printf("shared\n");
+			
 			return 0;					
 		} else if(line->isModified()){
-			printf("mod\n");
+			
 			return 0;			
 		}else if(line->isInvalidated()){
-			printf("invalid\n");
+			
 			line->setFlags(SHARED);
 			return 1;
 		}
@@ -133,17 +133,17 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 	
 	//PrWr
 	else {
-		printf("write:");
+
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
-			printf("shared\n");
+			
 			return 2;
 		} else if(line->isModified()){
-			printf("mod\n");
+			
 			return 0;
 		}else if(line->isInvalidated()){
 			line->setFlags(MODIFIED);
-			printf("invalid\n");
+			
 			return 2;
 		}	
 	}

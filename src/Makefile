@@ -27,7 +27,7 @@ smp_cache: $(OBJ)
 clean:
 	rm -f *.o smp_cache
 
-PROTOCOL = 1
+PROTOCOL = 0
 TRACE_FILE = ../trace/canneal.04t.debug
 # TRACE_FILE = ../trace/canneal.04t.longTrace
 VALIDATION_FILE = ../val/msi_debug.val
