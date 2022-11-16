@@ -83,14 +83,14 @@ int Cache::Access(ulong addr,uchar op)
 	  newline->setFlags(INVALID);
 	  printf("DEbug5\n");
       
-   } printf("DEbug2\n");;
+   } 
    else 
    {
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       if(op == 'w') line->setFlags(MODIFIED);
    }
-   
+   printf("DEbug2\n");;
    
    cacheLine * line2 = findLine(addr);
    currentTransaction = line2->doMsiReq(currentTransaction);
