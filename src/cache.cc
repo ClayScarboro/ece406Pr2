@@ -78,8 +78,7 @@ int Cache::Access(ulong addr,uchar op)
 	  }
 	  
       cacheLine *newline = fillLine(addr);
-      if(op == 'w')		  newline->setFlags(MODIFIED);   
-	 
+      if(op == 'w')	newline->setFlags(MODIFIED);   
 	  newline->setFlags(INVALID);
 	  
       
@@ -106,14 +105,14 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return; 
-	doFlush = doMsiSnoop(line,inst); 
+	doFlush = doMsiSnoop(addr,inst); 
 	if(doFlush < 0) ++invalidations;
 	if(doFlush == 2 || doFlush == -2) ++flushes;
 }
 
 //Does the Requestor side State Machine for MSI
-int Cache::doMsiReq(cacheLine * line,int transaction){
-	
+int Cache::doMsiReq(ulong addr,int transaction){
+	cacheLine * line = findLine(addr);s
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
 	

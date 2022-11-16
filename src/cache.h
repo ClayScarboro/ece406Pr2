@@ -90,7 +90,7 @@ public:
    void Snoop(ulong,uchar,int);
    void printStats(int);
    void updateLRU(cacheLine *);
-   int doMsiReq(cacheLine *,int);
+   int doMsiReq(ulong,int);
    int doMsiSnoop(cacheLine *,int);
    void doMsiBus();
    void doMESI();
