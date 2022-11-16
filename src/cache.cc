@@ -111,31 +111,26 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 int Cache::doMsiReq(cacheLine * line,int transaction){
 	
 	//returns bus intruction:
-	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
+	// 0: -, 1: BusRd, 2: BusRdX
 	
 	// PrRd
 	if(transaction == 1){
 		
 		if(line->isShared()){
-			
 			return 0;					
 		} else if(line->isModified()){
-			
 			return 0;			
 		}else if(line->isInvalidated()){
-			
 			line->setFlags(SHARED);
-			
 			return 1;
 		}
 	}
 	
 	//PrWr
 	else {
-		
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
-			return 3;
+			return 2;
 		} else if(line->isModified()){
 			return 0;
 		}else if(line->isInvalidated()){
@@ -182,19 +177,6 @@ int Cache::doMsiSnoop(cacheLine * line, int transaction){
 			return 1;
 		}
 	}
-	
-	//BusUpgr
-	if(transaction == 3){
-		if(line->isShared()){
-			line->invalidate();
-			return -1;					
-		} else if(line->isModified()){
-			return 1;	
-		}else if(line->isInvalidated()){
-			return 1;
-		}
-	}
-	
 	return 0;
 	
 }
