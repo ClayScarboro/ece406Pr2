@@ -288,7 +288,7 @@ void Cache::printStats(int proc)
 
 	totalMissRate = (((float) (readMisses + writeMisses)) / (reads + writes)) * 100;
 
-   printf("===== Simulation results (Cache %d) =====\n",proc);
+   printf("============ Simulation results (Cache %d) ============n",proc);
    printf("01. number of reads: %lu\n",reads);
    printf("02. number of read misses: %lu\n",readMisses);
    printf("03. number of writes: %lu\n",writes);
