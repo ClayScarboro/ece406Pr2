@@ -93,7 +93,7 @@ int Cache::Access(ulong addr,uchar op)
    printf("DEbug2\n");;
    
    cacheLine * line2 = findLine(addr);
-   printf("DEbug2\n");;
+   printf("DEbug2d\n");;
    currentTransaction = line2->doMsiReq(currentTransaction);
    printf("DEbug2222\n");;
    if (currentTransaction == 2) BusRdX++;
