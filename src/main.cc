@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     ulong cache_assoc    = atoi(argv[2]);
     ulong blk_size       = atoi(argv[3]);
     ulong num_processors = atoi(argv[4]);
-    ulong protocol       = atoi(argv[5]); /* 0:MSI 1:MSI BusUpgr 2:MESI 3:MESI Snoop FIlter */
+    //ulong protocol       = atoi(argv[5]); /* 0:MSI 1:MSI BusUpgr 2:MESI 3:MESI Snoop FIlter */
     char *fname        = (char *) malloc(20);
     fname              = argv[6];
 
