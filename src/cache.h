@@ -36,11 +36,6 @@ public:
    void setTag(ulong a)       { tag = a; }
    void invalidate()          { tag = 0; Flags = INVALID; } //useful function
    
-   int doMsiReq(int);
-   int doMsiSnoop(int);
-   void doMsiBus();
-   void doMESI();
-   
    bool isValid()             { return ((Flags) != INVALID); }
    bool isShared()             { return ((Flags) == SHARED); }
    bool isModified()             { return ((Flags) == MODIFIED); }
@@ -95,6 +90,10 @@ public:
    void Snoop(ulong,uchar,int);
    void printStats(int);
    void updateLRU(cacheLine *);
+   int doMsiReq(cacheLine *);
+   int doMsiSnoop(cacheLine *);
+   void doMsiBus();
+   void doMESI();
 
    //******///
    //add other functions to handle bus transactions///

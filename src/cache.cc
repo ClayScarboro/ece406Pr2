@@ -94,7 +94,7 @@ int Cache::Access(ulong addr,uchar op)
    
    cacheLine * line2 = findLine(addr);
    
-   currentTransaction = line2->doMsiReq(currentTransaction);
+   currentTransaction = doMsiReq(line2);
    
    if (currentTransaction == 2) BusRdX++;
    else if (currentTransaction == 3) BusUpgr++;
@@ -106,13 +106,13 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return; 
-	doFlush = line->doMsiSnoop(inst); 
+	doFlush = doMsiSnoop(line); 
 	if(doFlush < 0) ++invalidations;
 	if(doFlush == 2 || doFlush == -2) ++flushes;
 }
 
 //Does the Requestor side State Machine for MSI
-int cacheLine::doMsiReq(int transaction){
+int cacheLine::doMsiReq(cacheLine * line){
 	
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
@@ -120,13 +120,13 @@ int cacheLine::doMsiReq(int transaction){
 	// PrRd
 	if(transaction == 1){
 		printf("DEbug66d\n");
-		if(1){
+		if(line->isShared()){
 			printf("DEbug2d\n");
 			return 0;					
-		} else if(1){
+		} else if(line->isModified()){
 			printf("DEbug3d\n");
 			return 0;			
-		}else if(1){
+		}else if(line->isInvalidated()){
 			printf("DEbug4d\n");
 			setFlags(SHARED);
 			printf("DEbug5d\n");
@@ -137,12 +137,12 @@ int cacheLine::doMsiReq(int transaction){
 	//PrWr
 	else {
 		printf("DEbug3d\n");;
-		if(isShared()){
+		if(line->isShared()){
 			setFlags(MODIFIED);
 			return 3;
-		} else if(isModified()){
+		} else if(line->isModified()){
 			return 0;
-		}else if(isInvalidated()){
+		}else if(line->isInvalidated()){
 			setFlags(MODIFIED);
 			return 2;
 		}	
@@ -152,7 +152,7 @@ int cacheLine::doMsiReq(int transaction){
 }
 
 //Does the Snooper Side State Machine for MSI
-int cacheLine::doMsiSnoop(int transaction){
+int cacheLine::doMsiSnoop(cacheLine * line){
 	
 	//returns Cache intruction:
 	// 1: -, 2: Flush, -# = flush;
@@ -162,27 +162,27 @@ int cacheLine::doMsiSnoop(int transaction){
 	
 	// BusRd
 	if(transaction == 1){
-		if(isShared()){
+		if(line->isShared()){
 			return 1;					
-		} else if(isModified()){
+		} else if(line->isModified()){
 			setFlags(SHARED);
 			return 2;
-		}else if(isInvalidated()){
+		}else if(line->isInvalidated()){
 			return 1;
 		}
 	}
 	
 	//BusRdX
 	if(transaction == 2){
-		if(isShared()){
+		if(line->isShared()){
 			setFlags(INVALID);
 			
 			return -1;					
-		} else if(isModified()){
+		} else if(line->isModified()){
 			setFlags(INVALID);
 			
 			return -2;	
-		}else if(isInvalidated()){
+		}else if(line->isInvalidated()){
 			return 1;
 		}
 	}
