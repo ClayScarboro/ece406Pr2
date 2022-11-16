@@ -79,8 +79,6 @@ int Cache::Access(ulong addr,uchar op)
 	  
       cacheLine *newline = fillLine(addr);
       if(op == 'w')	newline->setFlags(MODIFIED);   
-	  
-	  
       currentTransaction = doMsiReq(newline,currentTransaction);
 	  
    } 
