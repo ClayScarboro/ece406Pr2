@@ -112,7 +112,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 }
 
 //Does the Requestor side State Machine for MSI
-int cacheLine::doMsiReq(cacheLine * line){
+int Cache::doMsiReq(cacheLine * line){
 	
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
@@ -152,7 +152,7 @@ int cacheLine::doMsiReq(cacheLine * line){
 }
 
 //Does the Snooper Side State Machine for MSI
-int cacheLine::doMsiSnoop(cacheLine * line){
+int Cache::doMsiSnoop(cacheLine * line){
 	
 	//returns Cache intruction:
 	// 1: -, 2: Flush, -# = flush;
