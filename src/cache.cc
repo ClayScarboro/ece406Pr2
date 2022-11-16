@@ -90,8 +90,10 @@ int Cache::Access(ulong addr,uchar op)
       if(op == 'w') line->setFlags(MODIFIED);
    }
    
+   printf("DEbug2d\n");
    cacheLine * line2 = findLine(addr);
    line2->isShared();
+   printf("DEbug3d\n");
    currentTransaction = doMsiReq(addr,currentTransaction);
    
    if (currentTransaction == 2) BusRdX++;
