@@ -28,8 +28,8 @@ clean:
 	rm -f *.o smp_cache
 
 PROTOCOL = 0
-TRACE_FILE = ../trace/canneal.04t.debug
-# TRACE_FILE = ../trace/canneal.04t.longTrace
+# TRACE_FILE = ../trace/canneal.04t.debug
+ TRACE_FILE = ../trace/canneal.04t.longTrace
 VALIDATION_FILE = ../val/msi_debug.val
 # VALIDATION_FILE = ../val/mesi_filter_long.val
 
