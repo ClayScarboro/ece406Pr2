@@ -78,4 +78,5 @@ int main(int argc, char *argv[])
 		cacheArray[i]->printStats(i);
 	}
     
+	return 0;
 }
