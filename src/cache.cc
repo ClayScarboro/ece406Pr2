@@ -91,7 +91,7 @@ int Cache::Access(ulong addr,uchar op)
 	  snoopTransaction = doMsiReq(line,currentTransaction);
    }
    
-   printf("snoop transaction: %d\n");
+   printf("snoop transaction: %d\n",snoopTransaction);
    if (snoopTransaction == 2) BusRdX++;
    else if (snoopTransaction == 3) BusUpgr++;
    return snoopTransaction;
