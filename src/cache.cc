@@ -80,8 +80,9 @@ int Cache::Access(ulong addr,uchar op)
       cacheLine *newline = fillLine(addr);
       if(op == 'w')	newline->setFlags(MODIFIED);   
 	  newline->setFlags(INVALID);
-	  
-      
+	  printf("debug1\n");
+      newline->isInvalidated();
+	  printf("debug12\n");
    } 
    else 
    {
@@ -90,7 +91,7 @@ int Cache::Access(ulong addr,uchar op)
       if(op == 'w') line->setFlags(MODIFIED);
    }
    
-   newLine->isInvalidated();
+   
    currentTransaction = doMsiReq(addr,currentTransaction);
    
    if (currentTransaction == 2) BusRdX++;
