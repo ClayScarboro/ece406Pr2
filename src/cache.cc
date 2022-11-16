@@ -58,7 +58,7 @@ int Cache::Access(ulong addr,uchar op)
 	
 	// 1 = PrRd; 2 = PrWr;
 	int currentTransaction = 0;
-	
+	printf("DEbug1\n");
    currentCycle++;/*per cache global counter to maintain LRU order 
                     among cache ways, updated on every cache access*/
          
@@ -76,15 +76,15 @@ int Cache::Access(ulong addr,uchar op)
 		  memoryTransactions++;
 		  readMisses++;
 	  }
-	  
+	  printf("DEbug3\n");
       cacheLine *newline = fillLine(addr);
       if(op == 'w')		  newline->setFlags(MODIFIED);   
 	 
 	  newline->setFlags(INVALID);
-	  
+	  printf("DEbug5\n");
       
-   }
-   else
+   } printf("DEbug2\n");;
+   else 
    {
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
