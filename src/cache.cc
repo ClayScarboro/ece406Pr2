@@ -60,8 +60,6 @@ int Cache::Access(ulong addr,uchar op)
 	int currentTransaction = 0;
 	int snoopTransaction = 0;
 	
-	printf("%c ",op);
-	
    currentCycle++;/*per cache global counter to maintain LRU order 
                     among cache ways, updated on every cache access*/
          
