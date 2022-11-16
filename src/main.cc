@@ -25,12 +25,21 @@ int main(int argc, char *argv[])
     ulong cache_assoc    = atoi(argv[2]);
     ulong blk_size       = atoi(argv[3]);
     ulong num_processors = atoi(argv[4]);
-    //ulong protocol       = atoi(argv[5]); /* 0:MSI 1:MSI BusUpgr 2:MESI 3:MESI Snoop FIlter */
+    ulong protocol       = atoi(argv[5]); /* 0:MSI 1:MSI BusUpgr 2:MESI 3:MESI Snoop FIlter */
     char *fname        = (char *) malloc(20);
     fname              = argv[6];
 
     printf("===== Simulator configuration =====\n");
-    // print out simulator configuration here
+    printf("L1_SIZE: %lu\n",cache_size);
+	printf("L1_ASSOC: %lu\n",cache_assoc);
+	printf("L1_BLOCKSIZE: %lu\n",blk_size);
+	printf("NUMBER OF PROCESSORS: %lu\n",num_processors);
+	printf("COHERENCE PROTOCOL: ");
+	if(protocol == 0) printf("MSI\n");
+	if(protocol == 1) printf("MSI BusUpgr\n");
+	if(protocol == 2) printf("MESI\n");
+	if(protocol == 3) printf("MESI Snoop Filter\n");
+	printf("TRACE FILE: %s\n",fname);
     
     // Using pointers so that we can use inheritance */
     Cache** cacheArray = (Cache **) malloc(num_processors * sizeof(Cache));
