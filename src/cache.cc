@@ -134,7 +134,7 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 		printf("write:\n");
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
-			printf("shared: %d\n");
+			printf("shared\n");
 			return 2;
 		} else if(line->isModified()){
 			printf("mod\n");
