@@ -164,6 +164,7 @@ int Cache::doMsiSnoop(cacheLine * line, int transaction){
 			return 1;					
 		} else if(line->isModified()){
 			line->setFlags(SHARED);
+			interventions++;
 			return 2;
 		}else if(line->isInvalidated()){
 			return 1;
