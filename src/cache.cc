@@ -80,7 +80,7 @@ int Cache::Access(ulong addr,uchar op)
       cacheLine *newline = fillLine(addr);
       if(op == 'w')		  newline->setFlags(DIRTY);   
 	 
-	  newline->setState(INVALIDATED);
+	  newline->setState(INVALID);
 	  
       
    }
@@ -167,11 +167,11 @@ int cacheLine::doMsiSnoop(int transaction){
 	//BusRdX
 	if(transaction == 2){
 		if(isShared()){
-			setState(INVALIDATED);
+			setState(INVALID);
 			
 			return -1;					
 		} else if(isModified()){
-			setState(INVALIDATED);
+			setState(INVALID);
 			
 			return -2;	
 		}else if(isInvalidated()){
@@ -182,7 +182,7 @@ int cacheLine::doMsiSnoop(int transaction){
 	//BusUpgr
 	if(transaction == 3){
 		if(isShared()){
-			setState(INVALIDATED);
+			setState(INVALID);
 			return -1;					
 		} else if(isModified()){
 			return 1;	

@@ -19,7 +19,6 @@ enum {
    DIRTY,
    SHARED,
    MODIFIED,
-   INVALIDATED
 };
 
 class cacheLine 
@@ -50,7 +49,7 @@ public:
    bool isValid()             { return ((Flags) != INVALID); }
    bool isShared()             { return ((State) == SHARED); }
    bool isModified()             { return ((State) == MODIFIED); }
-   bool isInvalidated()             { return ((State) == INVALIDATED); }
+   bool isInvalidated()             { return ((State) == INVALID); }
 };
 
 class Cache
