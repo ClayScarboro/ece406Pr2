@@ -105,7 +105,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 	int doFlush;
 	if (line == NULL) return; 
 	doFlush = line->doMsiSnoop(inst); 
-	if(doFlush < 0) ++invalidations);
+	if(doFlush < 0) ++invalidations;
 	if(doFlush == 2 || doFlush == -2) ++flushes;
 }
 
@@ -299,7 +299,7 @@ void Cache::printStats(int proc)
    printf("03. number of writes: %lu\n",writes);
    printf("04. number of write misses: %lu\n",writeMisses);
    printf("05. total miss rate: %.2f",totalMissRate);
-   printf("%\n");
+   printf("%%\n");
    printf("06. number of writebacks: %lu\n",writeBacks);
    printf("07. number of cache-to-cache transfers: %d\n",cache2cache);
    printf("08. number of memory transactions: %d\n",memoryTransactions);
