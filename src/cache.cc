@@ -72,10 +72,13 @@ int Cache::Access(ulong addr,uchar op)
    if(line == NULL)/*miss*/
    {
       if(op == 'w') writeMisses++;
-      else readMisses++;
-
+      else {
+		  memoryTransactions++;
+		  readMisses++;
+	  }
+	  
       cacheLine *newline = fillLine(addr);
-      if(op == 'w') newline->setFlags(DIRTY);   
+      if(op == 'w')		  newline->setFlags(DIRTY);   
 	 
 	  newline->setState(INVALIDATED);
 	  
@@ -97,8 +100,10 @@ int Cache::Access(ulong addr,uchar op)
 
 void Cache::Snoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
+	int doFlush
 	if (line == NULL) return; 
-	line->doMsiSnoop(inst); 
+	doFlush = line->doMsiSnoop(inst); 
+	if (doFlush()) flushes++;
 }
 
 //Does the Requestor side State Machine for MSI
@@ -158,11 +163,14 @@ int cacheLine::doMsiSnoop(int transaction){
 	
 	//BusRdX
 	if(transaction == 2){
+		BusRdX++;
 		if(isShared()){
 			setState(INVALIDATED);
+			invalidations++;
 			return 0;					
 		} else if(isModified()){
 			setState(INVALIDATED);
+			invalidations++;
 			return 1;	
 		}else if(isInvalidated()){
 			return 0;
@@ -171,6 +179,7 @@ int cacheLine::doMsiSnoop(int transaction){
 	
 	//BusUpgr
 	if(transaction == 3){
+		BusUpgr++;
 		if(isShared()){
 			setState(INVALIDATED);
 			return 0;					
@@ -280,12 +289,16 @@ cacheLine *Cache::fillLine(ulong addr)
 
 void Cache::printStats(int proc)
 { 
+
+	totalMissRate = ((float) (readMisses + writeMisses)) / (reads + writes);
+
    printf("===== Simulation results (Cache %d) =====\n",proc);
    printf("01. number of reads: %lu\n",reads);
    printf("02. number of read misses: %lu\n",readMisses);
    printf("03. number of writes: %lu\n",writes);
    printf("04. number of write misses: %lu\n",writeMisses);
-   printf("05. total miss rate: %d\n",totalMissRate);
+   printf("05. total miss rate: %.2f",totalMissRate);
+   printf("%\n");
    printf("06. number of writebacks: %lu\n",writeBacks);
    printf("07. number of cache-to-cache transfers: %d\n",cache2cache);
    printf("08. number of memory transactions: %d\n",memoryTransactions);

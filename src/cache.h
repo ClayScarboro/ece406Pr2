@@ -76,7 +76,7 @@ public:
    
    
    //Counters
-   int totalMissRate;
+   float totalMissRate;
    int cache2cache;
    int memoryTransactions;
    int interventions;
@@ -96,7 +96,7 @@ public:
    ulong getWrites() {return writes;}
    ulong getWB()     {return writeBacks;}
    
-   void writeBack(ulong) {writeBacks++;}
+   void writeBack(ulong) {writeBacks++; memoryTransactions++;}
    int Access(ulong,uchar);
    void Snoop(ulong,uchar,int);
    void printStats(int);
