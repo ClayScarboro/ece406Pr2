@@ -311,8 +311,248 @@ int Cache::doMsiReq(cacheLine * line,int transaction){
 	return 0;
 }
 
+int Cache::doMsiBusReq(cacheLine * line,int transaction){
+	
+	//returns bus intruction:
+	// 0: -, 1: BusRd, 2: BusRdX
+	
+	// PrRd
+	if(transaction == 1){
+		
+		if(line->isShared()){
+			
+			return 0;					
+		} else if(line->isModified()){
+			
+			return 0;			
+		}else if(line->isInvalidated()){
+			
+			line->setFlags(SHARED);
+			return 1;
+		}
+	}
+	
+	//PrWr
+	else {
+
+		if(line->isShared()){
+			line->setFlags(MODIFIED);
+			
+			return 2;
+		} else if(line->isModified()){
+			
+			return 0;
+		}else if(line->isInvalidated()){
+			line->setFlags(MODIFIED);
+			
+			return 2;
+		}	
+	}
+	
+	return 0;
+}
+
+int Cache::doMESIReq(cacheLine * line,int transaction){
+	
+	//returns bus intruction:
+	// 0: -, 1: BusRd, 2: BusRdX
+	
+	// PrRd
+	if(transaction == 1){
+		
+		if(line->isShared()){
+			
+			return 0;					
+		} else if(line->isModified()){
+			
+			return 0;			
+		}else if(line->isInvalidated()){
+			
+			line->setFlags(SHARED);
+			return 1;
+		}
+	}
+	
+	//PrWr
+	else {
+
+		if(line->isShared()){
+			line->setFlags(MODIFIED);
+			
+			return 2;
+		} else if(line->isModified()){
+			
+			return 0;
+		}else if(line->isInvalidated()){
+			line->setFlags(MODIFIED);
+			
+			return 2;
+		}	
+	}
+	
+	return 0;
+}
+
+int Cache::doMESISnoopReq(cacheLine * line,int transaction){
+	
+	//returns bus intruction:
+	// 0: -, 1: BusRd, 2: BusRdX
+	
+	// PrRd
+	if(transaction == 1){
+		
+		if(line->isShared()){
+			
+			return 0;					
+		} else if(line->isModified()){
+			
+			return 0;			
+		}else if(line->isInvalidated()){
+			
+			line->setFlags(SHARED);
+			return 1;
+		}
+	}
+	
+	//PrWr
+	else {
+
+		if(line->isShared()){
+			line->setFlags(MODIFIED);
+			
+			return 2;
+		} else if(line->isModified()){
+			
+			return 0;
+		}else if(line->isInvalidated()){
+			line->setFlags(MODIFIED);
+			
+			return 2;
+		}	
+	}
+	
+	return 0;
+}
+
 //Does the Snooper Side State Machine for MSI
 int Cache::doMsiSnoop(cacheLine * line, int transaction){
+	
+	//returns Cache intruction:
+	// 1: -, 2: Flush, -# = flush;
+	
+	// -
+	if(transaction == 0) return 0;
+	
+	// BusRd
+	if(transaction == 1){
+		if(line->isShared()){
+			return 1;					
+		} else if(line->isModified()){
+			line->setFlags(SHARED);
+			interventions++;
+			return 2;
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
+	
+	//BusRdX
+	if(transaction == 2){
+		if(line->isShared()){
+			line->invalidate();
+			invalidations++;
+			return -1;					
+		} else if(line->isModified()){
+			line->invalidate();
+			invalidations++;
+			return -2;	
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
+	return 0;
+	
+}
+
+int Cache::doMsiBusSnoop(cacheLine * line, int transaction){
+	
+	//returns Cache intruction:
+	// 1: -, 2: Flush, -# = flush;
+	
+	// -
+	if(transaction == 0) return 0;
+	
+	// BusRd
+	if(transaction == 1){
+		if(line->isShared()){
+			return 1;					
+		} else if(line->isModified()){
+			line->setFlags(SHARED);
+			interventions++;
+			return 2;
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
+	
+	//BusRdX
+	if(transaction == 2){
+		if(line->isShared()){
+			line->invalidate();
+			invalidations++;
+			return -1;					
+		} else if(line->isModified()){
+			line->invalidate();
+			invalidations++;
+			return -2;	
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
+	return 0;
+	
+}
+
+int Cache::doMESISnoop(cacheLine * line, int transaction){
+	
+	//returns Cache intruction:
+	// 1: -, 2: Flush, -# = flush;
+	
+	// -
+	if(transaction == 0) return 0;
+	
+	// BusRd
+	if(transaction == 1){
+		if(line->isShared()){
+			return 1;					
+		} else if(line->isModified()){
+			line->setFlags(SHARED);
+			interventions++;
+			return 2;
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
+	
+	//BusRdX
+	if(transaction == 2){
+		if(line->isShared()){
+			line->invalidate();
+			invalidations++;
+			return -1;					
+		} else if(line->isModified()){
+			line->invalidate();
+			invalidations++;
+			return -2;	
+		}else if(line->isInvalidated()){
+			return 1;
+		}
+	}
+	return 0;
+	
+}
+
+int Cache::doMESISnoopSnoopcacheLine * line, int transaction){
 	
 	//returns Cache intruction:
 	// 1: -, 2: Flush, -# = flush;
