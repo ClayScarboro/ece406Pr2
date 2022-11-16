@@ -78,7 +78,7 @@ int Cache::Access(ulong addr,uchar op)
 	  }
 	  
       cacheLine *newline = fillLine(addr);
-      if(op == 'w')		  newline->setFlags(DIRTY);   
+      if(op == 'w')		  newline->setFlags(MODIFIED);   
 	 
 	  newline->setState(INVALID);
 	  
@@ -88,7 +88,7 @@ int Cache::Access(ulong addr,uchar op)
    {
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
-      if(op == 'w') line->setFlags(DIRTY);
+      if(op == 'w') line->setFlags(MODIFIED);
    }
    
    
@@ -275,7 +275,7 @@ cacheLine *Cache::fillLine(ulong addr)
    cacheLine *victim = findLineToReplace(addr);
    assert(victim != 0);
    
-   if(victim->getFlags() == DIRTY) {
+   if(victim->getFlags() == MODIFIED) {
       writeBack(addr);
    }
       

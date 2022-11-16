@@ -15,8 +15,6 @@ typedef unsigned int uint;
 /****add new states, based on the protocol****/
 enum {
    INVALID = 0,
-   VALID,
-   DIRTY,
    SHARED,
    MODIFIED,
 };
