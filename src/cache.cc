@@ -367,7 +367,7 @@ int Cache::doMESIReq(cacheLine * line,int transaction, int onlyCopy){
 			return 0;			
 		}else if(line->isInvalidated()){
 			if(onlyCopy) line->setFlags(EXCLUSIVE);
-			else line->setFlags(SHARED);
+			else{ ++cache2cache; line->setFlags(SHARED); }
 			return 1;
 		}else if(line->isExclusive()){
 			return 0;
@@ -402,32 +402,31 @@ int Cache::doMESISnoopReq(cacheLine * line,int transaction, int onlyCopy){
 	if(transaction == 1){
 		
 		if(line->isShared()){
-			
 			return 0;					
 		} else if(line->isModified()){
-			
 			return 0;			
 		}else if(line->isInvalidated()){
-			
-			line->setFlags(SHARED);
+			if(onlyCopy) line->setFlags(EXCLUSIVE);
+			else{ ++cache2cache; line->setFlags(SHARED); }
 			return 1;
+		}else if(line->isExclusive()){
+			return 0;
 		}
 	}
 	
 	//PrWr
 	else {
-
 		if(line->isShared()){
 			line->setFlags(MODIFIED);
-			
-			return 2;
+			return 3;					
 		} else if(line->isModified()){
-			
-			return 0;
+			return 0;			
 		}else if(line->isInvalidated()){
 			line->setFlags(MODIFIED);
-			
 			return 2;
+		}else if(line->isExclusive()){
+			line->setFlags(MODIFIED);
+			return 0;
 		}	
 	}
 	
