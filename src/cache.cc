@@ -173,7 +173,7 @@ int Cache::AccessMESI(ulong addr,uchar op, int onlyCopy)
 	  
       cacheLine *newline = fillLine(addr);
       //if(op == 'w')	newline->setFlags(MODIFIED);   
-      snoopTransaction = doMESIReq(newline,currentTransaction);
+      snoopTransaction = doMESIReq(newline,currentTransaction,onlyCopy);
 	  
    } 
    else 
@@ -219,7 +219,7 @@ int Cache::AccessMESISnoop(ulong addr,uchar op, int onlyCopy)
 	  
       cacheLine *newline = fillLine(addr);
       //if(op == 'w')	newline->setFlags(MODIFIED);   
-      snoopTransaction = doMESISnoopReq(newline,currentTransaction);
+      snoopTransaction = doMESISnoopReq(newline,currentTransaction,onlyCopy);
 	  
    } 
    else 
@@ -227,7 +227,7 @@ int Cache::AccessMESISnoop(ulong addr,uchar op, int onlyCopy)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       //if(op == 'w') line->setFlags(MODIFIED);
-	  snoopTransaction = doMESISnoopReq(line,currentTransaction);
+	  snoopTransaction = doMESISnoopReq(line,currentTransaction,onlyCopy);
    }
    
    
