@@ -110,7 +110,7 @@ void Cache::Snoop(ulong addr, uchar op, int inst){
 //Does the Requestor side State Machine for MSI
 int Cache::doMsiReq(ulong addr,int transaction){
 	cacheLine * line = findLine(addr);
-	line->isModified();
+	line->getFlags();
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX, 3: BusUpgr
 	
