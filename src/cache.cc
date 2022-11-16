@@ -126,7 +126,7 @@ int Cache::AccessMSIBus(ulong addr,uchar op)
 	  
       cacheLine *newline = fillLine(addr);
       //if(op == 'w')	newline->setFlags(MODIFIED);   
-      snoopTransaction = doMsiReq(newline,currentTransaction);
+      snoopTransaction = doMsiBusReq(newline,currentTransaction);
 	  
    } 
    else 
@@ -134,7 +134,7 @@ int Cache::AccessMSIBus(ulong addr,uchar op)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       //if(op == 'w') line->setFlags(MODIFIED);
-	  snoopTransaction = doMsiReq(line,currentTransaction);
+	  snoopTransaction = doMsiBusReq(line,currentTransaction);
    }
    
    
@@ -172,7 +172,7 @@ int Cache::AccessMESI(ulong addr,uchar op)
 	  
       cacheLine *newline = fillLine(addr);
       //if(op == 'w')	newline->setFlags(MODIFIED);   
-      snoopTransaction = doMsiReq(newline,currentTransaction);
+      snoopTransaction = doMESIReq(newline,currentTransaction);
 	  
    } 
    else 
@@ -180,7 +180,7 @@ int Cache::AccessMESI(ulong addr,uchar op)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       //if(op == 'w') line->setFlags(MODIFIED);
-	  snoopTransaction = doMsiReq(line,currentTransaction);
+	  snoopTransaction = doMESIReq(line,currentTransaction);
    }
    
    
@@ -218,7 +218,7 @@ int Cache::AccessMESISnoop(ulong addr,uchar op)
 	  
       cacheLine *newline = fillLine(addr);
       //if(op == 'w')	newline->setFlags(MODIFIED);   
-      snoopTransaction = doMsiReq(newline,currentTransaction);
+      snoopTransaction = doMESISnoopReq(newline,currentTransaction);
 	  
    } 
    else 
@@ -226,7 +226,7 @@ int Cache::AccessMESISnoop(ulong addr,uchar op)
       /**since it's a hit, update LRU and update dirty flag**/
       updateLRU(line);
       //if(op == 'w') line->setFlags(MODIFIED);
-	  snoopTransaction = doMsiReq(line,currentTransaction);
+	  snoopTransaction = doMESISnoopReq(line,currentTransaction);
    }
    
    
@@ -249,7 +249,7 @@ void Cache::SnoopMSIBus(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
-	doFlush = doMsiSnoop(line,inst); 
+	doFlush = doMsiBusSnoop(line,inst); 
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
 
@@ -257,7 +257,7 @@ void Cache::SnoopMESI(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
-	doFlush = doMsiSnoop(line,inst); 
+	doFlush = doMESISnoop(line,inst); 
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
 
@@ -265,7 +265,7 @@ void Cache::SnoopMESISnoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
 	if (line == NULL) return;
-	doFlush = doMsiSnoop(line,inst); 
+	doFlush = doMESISnoopSnoop(line,inst); 
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
 

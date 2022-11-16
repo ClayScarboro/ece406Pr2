@@ -98,8 +98,12 @@ public:
    void updateLRU(cacheLine *);
    int doMsiReq(cacheLine *,int);
    int doMsiSnoop(cacheLine *,int);
-   void doMsiBus();
-   void doMESI();
+   int doMsiBusReq(cacheLine *,int);
+   int doMsiBusSnoop(cacheLine *,int);
+   int doMESIReq(cacheLine *,int);
+   int doMESISnoop(cacheLine *,int);
+   int doMESISnoopReq(cacheLine *,int);
+   int doMESISnoopSnoop(cacheLine *,int);
 
    //******///
    //add other functions to handle bus transactions///
