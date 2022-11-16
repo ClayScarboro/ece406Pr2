@@ -80,7 +80,7 @@ int Cache::Access(ulong addr,uchar op)
       cacheLine *newline = fillLine(addr);
       if(op == 'w')		  newline->setFlags(MODIFIED);   
 	 
-	  newline->setState(INVALID);
+	  newline->setFlags(INVALID);
 	  
       
    }
@@ -122,7 +122,7 @@ int cacheLine::doMsiReq(int transaction){
 		} else if(isModified()){
 			return 0;			
 		}else if(isInvalidated()){
-			setState(SHARED);
+			setFlags(SHARED);
 			return 1;
 		}
 	}
@@ -130,12 +130,12 @@ int cacheLine::doMsiReq(int transaction){
 	//PrWr
 	else {
 		if(isShared()){
-			setState(MODIFIED);
+			setFlags(MODIFIED);
 			return 3;
 		} else if(isModified()){
 			return 0;
 		}else if(isInvalidated()){
-			setState(MODIFIED);
+			setFlags(MODIFIED);
 			return 2;
 		}	
 	}
@@ -157,7 +157,7 @@ int cacheLine::doMsiSnoop(int transaction){
 		if(isShared()){
 			return 1;					
 		} else if(isModified()){
-			setState(SHARED);
+			setFlags(SHARED);
 			return 2;
 		}else if(isInvalidated()){
 			return 1;
@@ -167,11 +167,11 @@ int cacheLine::doMsiSnoop(int transaction){
 	//BusRdX
 	if(transaction == 2){
 		if(isShared()){
-			setState(INVALID);
+			setFlags(INVALID);
 			
 			return -1;					
 		} else if(isModified()){
-			setState(INVALID);
+			setFlags(INVALID);
 			
 			return -2;	
 		}else if(isInvalidated()){
@@ -182,7 +182,7 @@ int cacheLine::doMsiSnoop(int transaction){
 	//BusUpgr
 	if(transaction == 3){
 		if(isShared()){
-			setState(INVALID);
+			setFlags(INVALID);
 			return -1;					
 		} else if(isModified()){
 			return 1;	
