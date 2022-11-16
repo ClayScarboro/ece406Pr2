@@ -393,7 +393,7 @@ int Cache::doMESIReq(cacheLine * line,int transaction, int onlyCopy){
 	return 0;
 }
 
-int Cache::doMESISnoopReq(cacheLine * line,int transaction){
+int Cache::doMESISnoopReq(cacheLine * line,int transaction, int onlyCopy){
 	
 	//returns bus intruction:
 	// 0: -, 1: BusRd, 2: BusRdX
