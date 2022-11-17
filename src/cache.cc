@@ -502,6 +502,7 @@ int Cache::doMsiBusSnoop(cacheLine * line, int transaction){
 	
 	//BusRdX
 	if(transaction == 2){
+		--memoryTransactions;
 		if(line->isShared()){
 			line->invalidate();
 			invalidations++;
