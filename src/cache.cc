@@ -31,7 +31,7 @@ Cache::Cache(int s,int a,int b )
    BusUpgr = 0;
    wastedSnoop = 0;
    usefulSnoop = 0;
-   ifilteredSnoop = 0;
+   filteredSnoop = 0;
  
    tagMask =0;
    for(i=0;i<log2Sets;i++)
