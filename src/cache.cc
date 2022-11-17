@@ -29,6 +29,9 @@ Cache::Cache(int s,int a,int b )
    flushes = 0;
    BusRdX = 0;
    BusUpgr = 0;
+   wastedSnoop = 0;
+   usefulSnoop = 0;
+   ifilteredSnoop = 0;
  
    tagMask =0;
    for(i=0;i<log2Sets;i++)
@@ -265,7 +268,10 @@ void Cache::SnoopMESI(ulong addr, uchar op, int inst){
 void Cache::SnoopMESISnoop(ulong addr, uchar op, int inst){
 	cacheLine * line = findLine(addr);
 	int doFlush;
-	if (line == NULL) return;
+	if (line == NULL){ 
+		if( inst == 2) ++wastedSnoop;
+		return;
+	}
 	doFlush = doMESISnoopSnoop(line,inst); 
 	if(doFlush == 2 || doFlush == -2){ memoryTransactions++; ++writeBacks; ++flushes; }
 }
@@ -590,7 +596,7 @@ int Cache::doMESISnoop(cacheLine * line, int transaction){
 int Cache::doMESISnoopSnoop (cacheLine * line, int transaction){
 	
 	//returns Cache intruction:
-	// 1: -, 2: Flush, -# = flush;
+	// 1: -, 2: Flush, 3: FlushOpt -# = flush;
 	
 	// -
 	if(transaction == 0) return 0;
@@ -598,27 +604,51 @@ int Cache::doMESISnoopSnoop (cacheLine * line, int transaction){
 	// BusRd
 	if(transaction == 1){
 		if(line->isShared()){
-			return 1;					
+			return 3;					
 		} else if(line->isModified()){
 			line->setFlags(SHARED);
 			interventions++;
 			return 2;
 		}else if(line->isInvalidated()){
 			return 1;
+		}else if(line->isExclusive()){
+			line->setFlags(SHARED);
+			interventions++;
+			return 3;
 		}
 	}
 	
 	//BusRdX
 	if(transaction == 2){
+		++usefulSnoop;
 		if(line->isShared()){
 			line->invalidate();
 			invalidations++;
-			return -1;					
+			return 3;
 		} else if(line->isModified()){
 			line->invalidate();
 			invalidations++;
-			return -2;	
+			return 2;
 		}else if(line->isInvalidated()){
+			return 1;
+		}else if(line->isExclusive()){
+			line->invalidate();
+			invalidations++;
+			return 3;
+		}
+	}
+	
+	//BusUpgr
+	if(transaction == 3){
+		if(line->isShared()){
+			line->invalidate();
+			invalidations++;
+			return 1;					
+		} else if(line->isModified()){
+			return 1;
+		}else if(line->isInvalidated()){
+			return 1;
+		}else if(line->isExclusive()){
 			return 1;
 		}
 	}
@@ -719,7 +749,7 @@ cacheLine *Cache::fillLine(ulong addr)
    return victim;
 }
 
-void Cache::printStats(int proc)
+void Cache::printStats(int proc,int doMoreStats)
 { 
 
 	totalMissRate = (((float) (readMisses + writeMisses)) / (reads + writes)) * 100;
@@ -739,4 +769,9 @@ void Cache::printStats(int proc)
    printf("11. number of flushes: %d\n",flushes);
    printf("12. number of BusRdX: %d\n",BusRdX);
    printf("13. number of BusUpgr: %d\n",BusUpgr);
+   if(doMoreStats){
+	    printf("14. number of useful snoops: %d\n",wastedSnoop);
+		printf("15. number of wasted snoops: %d\n",usefulSnoop);
+		printf("16. number of filtered snoops: %d\n",filteredSnoop);
+   }
 }

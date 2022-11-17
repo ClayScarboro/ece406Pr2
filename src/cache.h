@@ -75,6 +75,9 @@ public:
    int flushes;
    int BusRdX;
    int BusUpgr;
+   int wastedSnoop;
+   int usefulSnoop;
+   int filteredSnoop;
    
    cacheLine *findLineToReplace(ulong addr);
    cacheLine *fillLine(ulong addr);
@@ -96,7 +99,7 @@ public:
    void SnoopMSIBus(ulong,uchar,int);
    void SnoopMESI(ulong,uchar,int);
    void SnoopMESISnoop(ulong,uchar,int);
-   void printStats(int);
+   void printStats(int,int);
    void updateLRU(cacheLine *);
    int doMsiReq(cacheLine *,int);
    int doMsiSnoop(cacheLine *,int);

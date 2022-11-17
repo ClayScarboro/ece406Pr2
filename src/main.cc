@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 	int inst;
 
     int line = 1;
+	int doMorePrint = 0;
     while(fscanf(pFile, "%lu %c %lx", &proc, &op, &addr) != EOF)
     {
 #ifdef _DEBUG
@@ -116,7 +117,7 @@ int main(int argc, char *argv[])
 		} else if (protocol == 3){
 			// --------------- MESI Snoop Filter ------------------
 			//Cache and Requestor
-			
+			doMorePrint = 1;
 			int onlyCopy = 1;
 			for(ulong i = 0; i < num_processors; i++){
 				cacheLine * check;
@@ -144,7 +145,7 @@ int main(int argc, char *argv[])
     fclose(pFile);
 
     for(int i = 0; i < (int)num_processors; i++){
-		cacheArray[i]->printStats(i);
+		cacheArray[i]->printStats(i,doMorePrint);
 	}
     
 }
