@@ -27,11 +27,11 @@ smp_cache: $(OBJ)
 clean:
 	rm -f *.o smp_cache
 
-PROTOCOL = 3
+PROTOCOL = 0
 # TRACE_FILE = ../trace/canneal.04t.debug
  TRACE_FILE = ../trace/canneal.04t.longTrace
- # VALIDATION_FILE = ../val/msi_long.val
- VALIDATION_FILE = ../val/mesi_filter_long.val
+  VALIDATION_FILE = ../val/msi_long.val
+ #VALIDATION_FILE = ../val/mesi_filter_long.val
 
 run: all
 	@echo "*** Running ./smp_cache 8192 8 64 4 $(PROTOCOL) $(TRACE_FILE) ***"
